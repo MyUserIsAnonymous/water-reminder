@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#8ec5fc">
-    <meta name="description" content="Droplet - Your hydration companion that reminds you to drink water every 30 minutes">
-    <title>Droplet 💧</title>
+    <meta name="theme-color" content="#ffb6c1">
+    <meta name="description" content="Droplet - Your cute animal hydration companion that reminds you to drink water every 30 minutes">
+    <title>Droplet</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8ec5fc;
-            --primary-dark: #5d9cec;
-            --secondary: #e0c3fc;
-            --accent: #ff9a9e;
-            --accent-dark: #ff767c;
-            --success: #84fab0;
-            --warning: #ffcc33;
-            --text: #5d576b;
-            --text-light: #8a8798;
-            --light: #ffffff;
-            --light-transparent: rgba(255, 255, 255, 0.95);
-            --shadow: rgba(0, 0, 0, 0.1);
-            --shadow-dark: rgba(0, 0, 0, 0.15);
-            --radius: 25px;
-            --radius-small: 15px;
+            --pink: #ffb6c1;
+            --pink-dark: #ff8fa3;
+            --pink-light: #ffe4e9;
+            --purple: #d8b4fe;
+            --blue: #a5b4fc;
+            --mint: #99f6e4;
+            --yellow: #fef08a;
+            --text: #6d6875;
+            --text-light: #a49fab;
+            --white: #ffffff;
+            --white-transparent: rgba(255, 255, 255, 0.92);
+            --shadow: rgba(255, 182, 193, 0.2);
+            --radius: 28px;
+            --radius-small: 18px;
         }
         
         * {
@@ -35,11 +35,11 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'SF Pro Display', sans-serif;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #ffe4e9 0%, #f0e7ff 50%, #e0f4ff 100%);
             color: var(--text);
             min-height: 100vh;
             height: 100vh;
@@ -48,6 +48,44 @@
             overflow: hidden;
             position: relative;
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        
+        /* Decorative elements */
+        .paw-print {
+            position: fixed;
+            font-size: 1.5rem;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .sparkle {
+            position: fixed;
+            font-size: 1.2rem;
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+            animation: sparkle 2s infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+        
+        .heart {
+            position: fixed;
+            font-size: 1.3rem;
+            color: var(--pink);
+            opacity: 0.2;
+            z-index: 0;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
         }
         
         /* App Container */
@@ -60,6 +98,7 @@
             width: 100%;
             position: relative;
             overflow: hidden;
+            z-index: 1;
         }
         
         /* App Header */
@@ -67,38 +106,44 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 25px 15px;
-            background: var(--light-transparent);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(142, 197, 252, 0.2);
+            padding: 25px 25px 20px;
+            background: var(--white-transparent);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 2px solid rgba(255, 182, 193, 0.3);
             position: relative;
             z-index: 10;
+            border-radius: 0 0 30px 30px;
+            margin: 0 10px;
+            box-shadow: 0 5px 20px var(--shadow);
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
         
         .logo-icon {
-            font-size: 2.2rem;
-            animation: dropletBounce 3s infinite;
+            font-size: 2.8rem;
+            animation: bounce 3s infinite;
+            filter: drop-shadow(0 5px 5px rgba(255, 182, 193, 0.4));
         }
         
-        @keyframes dropletBounce {
+        @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-10px); }
         }
         
         .logo-text {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: linear-gradient(135deg, var(--pink), var(--purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-family: 'Comic Neue', cursive;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .header-actions {
@@ -107,23 +152,26 @@
         }
         
         .header-btn {
-            width: 44px;
-            height: 44px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: rgba(142, 197, 252, 0.1);
-            border: none;
+            background: var(--pink-light);
+            border: 2px solid var(--pink);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            color: var(--primary);
+            font-size: 1.3rem;
+            color: var(--pink-dark);
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
         }
         
         .header-btn:hover, .header-btn:active {
-            background: rgba(142, 197, 252, 0.2);
-            transform: scale(1.1);
+            background: var(--pink);
+            color: white;
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.5);
         }
         
         /* App Content */
@@ -143,58 +191,63 @@
         }
         
         .welcome-illustration {
-            font-size: 8rem;
+            font-size: 10rem;
             margin: 30px 0;
-            animation: float 4s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+            animation: float 4s infinite ease-in-out;
+            filter: drop-shadow(0 10px 15px rgba(255, 182, 193, 0.4));
         }
         
         .welcome-title {
-            font-size: 2.2rem;
-            color: var(--primary);
+            font-size: 2.5rem;
+            color: var(--pink-dark);
             margin-bottom: 15px;
-            font-weight: 700;
+            font-weight: 800;
+            font-family: 'Comic Neue', cursive;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .welcome-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--text-light);
             line-height: 1.6;
             margin-bottom: 30px;
             max-width: 320px;
             margin-left: auto;
             margin-right: auto;
+            padding: 0 15px;
         }
         
         .feature-list {
             text-align: left;
             max-width: 320px;
-            margin: 30px auto;
+            margin: 40px auto;
             padding-left: 20px;
         }
         
         .feature-item {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            font-size: 1rem;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            padding: 15px;
+            background: var(--white-transparent);
+            border-radius: var(--radius-small);
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 2px dashed var(--pink);
         }
         
         .feature-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: rgba(142, 197, 252, 0.15);
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            font-size: 1.2rem;
-            color: var(--primary);
+            margin-right: 20px;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
         }
         
         /* Main App Screen */
@@ -203,17 +256,75 @@
             animation: fadeIn 0.5s ease;
         }
         
+        /* Animal Mascot */
+        .mascot-container {
+            text-align: center;
+            margin: 20px 0 30px;
+            position: relative;
+        }
+        
+        .mascot {
+            font-size: 6rem;
+            display: inline-block;
+            animation: wiggle 4s infinite;
+            filter: drop-shadow(0 10px 20px rgba(255, 182, 193, 0.4));
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+        }
+        
+        .mascot:hover {
+            transform: scale(1.1);
+        }
+        
+        .mascot-message {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px var(--shadow);
+            font-size: 1rem;
+            border: 2px solid var(--pink);
+            display: none;
+            white-space: nowrap;
+            z-index: 20;
+            font-family: 'Comic Neue', cursive;
+        }
+        
+        .mascot-message::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid white;
+        }
+        
         /* Timer Card */
         .timer-card {
-            background: var(--light-transparent);
+            background: var(--white-transparent);
             border-radius: var(--radius);
             padding: 30px;
-            margin: 25px 0;
+            margin: 20px 0;
             box-shadow: 0 15px 35px var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid var(--pink);
             text-align: center;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .timer-card::before {
@@ -222,138 +333,163 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 8px;
-            background: linear-gradient(to right, var(--primary), var(--accent));
+            height: 10px;
+            background: linear-gradient(to right, var(--pink), var(--purple), var(--blue));
+            border-radius: var(--radius) var(--radius) 0 0;
         }
         
         .timer-display {
             font-size: 5.5rem;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--pink-dark);
             margin: 20px 0;
-            text-shadow: 0 5px 15px rgba(142, 197, 252, 0.3);
+            text-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
             font-variant-numeric: tabular-nums;
             font-feature-settings: "tnum";
+            font-family: 'Comic Neue', cursive;
         }
         
         .timer-status {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 30px;
-            padding: 15px;
+            padding: 20px;
             border-radius: var(--radius-small);
-            background: rgba(142, 197, 252, 0.08);
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(216, 180, 254, 0.1));
             color: var(--text);
-            min-height: 60px;
+            min-height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 2px dashed var(--pink);
+            font-weight: 600;
         }
         
         /* Controls */
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
+            gap: 18px;
+            margin: 25px 0;
         }
         
         .control-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--pink), var(--purple));
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 22px 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border-radius: 25px;
+            padding: 25px 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 8px 20px rgba(142, 197, 252, 0.3);
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
+            font-family: 'Comic Neue', cursive;
+            border: 2px solid white;
         }
         
         .control-btn i {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
         }
         
         .control-btn:hover, .control-btn:active {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(142, 197, 252, 0.4);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 182, 193, 0.6);
         }
         
         .control-btn:active {
-            transform: translateY(-2px);
+            transform: translateY(-4px) scale(1.02);
         }
         
         .control-btn.pause {
-            background: linear-gradient(135deg, var(--warning), #ffb347);
+            background: linear-gradient(135deg, var(--yellow), #ffd166);
         }
         
         .control-btn.reset {
-            background: linear-gradient(135deg, var(--accent), #fad0c4);
+            background: linear-gradient(135deg, var(--mint), #80ded9);
         }
         
         .control-btn.large {
             grid-column: span 2;
-            background: linear-gradient(135deg, var(--success), #8fd3f4);
+            background: linear-gradient(135deg, var(--blue), #a5b4fc);
+            padding: 25px;
         }
         
         /* Progress Section */
         .progress-section {
-            background: var(--light-transparent);
+            background: var(--white-transparent);
             border-radius: var(--radius);
-            padding: 25px;
+            padding: 30px;
             margin: 25px 0;
             box-shadow: 0 10px 30px var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid var(--pink);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .section-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.4rem;
-            color: var(--primary);
+            gap: 15px;
+            font-size: 1.6rem;
+            color: var(--pink-dark);
             margin-bottom: 25px;
+            font-weight: 800;
+            font-family: 'Comic Neue', cursive;
         }
         
         .section-title i {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
         }
         
         /* Water Bottles */
         .water-bottles {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
             margin: 25px 0;
         }
         
         .bottle-container {
             display: flex;
             align-items: center;
-            gap: 20px;
-            padding: 20px;
-            background: rgba(142, 197, 252, 0.08);
+            gap: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(216, 180, 254, 0.1));
             border-radius: var(--radius-small);
+            border: 2px solid var(--pink);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bottle-container::before {
+            content: '🐾';
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 1.5rem;
+            opacity: 0.3;
         }
         
         .bottle {
-            width: 70px;
-            height: 120px;
-            background: rgba(142, 197, 252, 0.1);
-            border-radius: 15px 15px 5px 5px;
+            width: 80px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px 20px 10px 10px;
             position: relative;
             overflow: hidden;
-            border: 3px solid rgba(142, 197, 252, 0.3);
+            border: 4px solid var(--pink);
             transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3);
         }
         
         .bottle.filled {
-            border-color: var(--accent);
+            border-color: var(--purple);
+            box-shadow: 0 8px 20px rgba(216, 180, 254, 0.4);
         }
         
         .bottle-water {
@@ -361,9 +497,9 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: linear-gradient(to top, var(--primary), var(--secondary));
-            transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border-radius: 0 0 2px 2px;
+            background: linear-gradient(to top, var(--pink), var(--purple));
+            transition: height 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 0 0 6px 6px;
         }
         
         .bottle-info {
@@ -371,41 +507,47 @@
         }
         
         .bottle-label {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            color: var(--text);
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--pink-dark);
+            font-family: 'Comic Neue', cursive;
         }
         
         .bottle-desc {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-light);
+            margin-bottom: 10px;
         }
         
         .bottle-status {
-            font-weight: 600;
-            color: var(--primary);
+            font-weight: 700;
+            color: var(--purple);
+            font-size: 1.2rem;
         }
         
         .progress-stats {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(142, 197, 252, 0.2);
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 3px dashed var(--pink);
         }
         
         .stats-number {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--pink-dark);
             line-height: 1;
+            font-family: 'Comic Neue', cursive;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .stats-label {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--text-light);
+            font-weight: 600;
         }
         
         .progress-goal {
@@ -414,15 +556,31 @@
         
         /* Fixed Reminder Section */
         .reminder-section {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: linear-gradient(135deg, var(--pink), var(--purple));
             color: white;
             border-radius: var(--radius);
-            padding: 25px;
+            padding: 30px;
             margin: 25px 0;
-            box-shadow: 0 15px 35px rgba(142, 197, 252, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.5);
+            border: 3px solid white;
             display: none;
-            animation: fadeIn 0.5s ease;
+            animation: pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .reminder-section::before {
+            content: '💕🐾✨';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.8rem;
+            opacity: 0.3;
         }
         
         .reminder-section.show {
@@ -430,113 +588,105 @@
         }
         
         .reminder-title {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-size: 2rem;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            font-family: 'Comic Neue', cursive;
+            font-weight: 700;
         }
         
         .reminder-message {
-            margin-bottom: 25px;
-            line-height: 1.5;
-            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 1.3rem;
+            font-weight: 600;
         }
         
         .reminder-actions {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
         
         .reminder-btn {
             flex: 1;
             background: white;
-            color: var(--primary);
+            color: var(--pink-dark);
             border: none;
             border-radius: 50px;
-            padding: 18px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 22px;
+            font-size: 1.3rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            font-family: 'Comic Neue', cursive;
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
         }
         
         .reminder-btn:hover, .reminder-btn:active {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.4);
         }
         
         .reminder-btn:active {
-            transform: translateY(-1px);
+            transform: translateY(-2px) scale(1.02);
         }
         
         .reminder-btn.drank {
             background: white;
-            color: var(--primary);
+            color: var(--pink-dark);
         }
         
         /* Stats Section */
         .stats-section {
-            background: var(--light-transparent);
+            background: var(--white-transparent);
             border-radius: var(--radius);
-            padding: 25px;
+            padding: 30px;
             margin: 25px 0;
             box-shadow: 0 10px 30px var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid var(--pink);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 25px;
+            margin-top: 25px;
         }
         
         .stat-card {
-            background: rgba(142, 197, 252, 0.08);
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.15), rgba(216, 180, 254, 0.15));
             border-radius: var(--radius-small);
-            padding: 20px;
+            padding: 25px;
             text-align: center;
+            border: 2px solid var(--pink);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow);
         }
         
         .stat-value {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 5px;
+            color: var(--pink-dark);
+            margin-bottom: 8px;
+            font-family: 'Comic Neue', cursive;
         }
         
         .stat-label {
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-        
-        /* History */
-        .history-list {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: 20px;
-            padding-right: 10px;
-        }
-        
-        .history-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            background: rgba(142, 197, 252, 0.05);
-            border-radius: var(--radius-small);
-            margin-bottom: 10px;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
+            font-size: 1rem;
+            color: var(--text);
+            font-weight: 600;
         }
         
         /* Settings */
@@ -548,8 +698,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(142, 197, 252, 0.1);
+            padding: 25px 0;
+            border-bottom: 2px dashed var(--pink);
         }
         
         .setting-info {
@@ -557,59 +707,76 @@
         }
         
         .setting-title {
-            font-weight: 600;
-            margin-bottom: 5px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--pink-dark);
+            font-size: 1.2rem;
         }
         
         .setting-desc {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-light);
+            line-height: 1.5;
         }
         
         /* Bottle Goal Selector */
         .goal-selector {
             display: flex;
-            gap: 15px;
-            margin-top: 10px;
+            gap: 20px;
+            margin-top: 20px;
         }
         
         .goal-option {
             flex: 1;
             text-align: center;
-            padding: 15px;
-            background: rgba(142, 197, 252, 0.1);
+            padding: 25px 15px;
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(216, 180, 254, 0.1));
             border-radius: var(--radius-small);
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .goal-option::before {
+            content: '💧';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            opacity: 0.2;
         }
         
         .goal-option:hover {
-            background: rgba(142, 197, 252, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow);
         }
         
         .goal-option.active {
-            background: rgba(142, 197, 252, 0.25);
-            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--pink-light), var(--purple));
+            border-color: var(--pink);
+            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
         }
         
         .goal-number {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 5px;
+            color: var(--pink-dark);
+            margin-bottom: 8px;
+            font-family: 'Comic Neue', cursive;
         }
         
         .goal-label {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text);
+            font-weight: 600;
         }
         
-        /* Toggle Switch */
+        /* Cute Toggle Switch */
         .toggle-switch {
             position: relative;
-            width: 60px;
-            height: 30px;
+            width: 70px;
+            height: 36px;
         }
         
         .toggle-switch input {
@@ -625,73 +792,91 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: #ffd1dc;
             transition: .4s;
             border-radius: 34px;
+            border: 2px solid var(--pink);
         }
         
         .toggle-slider:before {
             position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
+            content: "❤️";
+            height: 28px;
+            width: 28px;
             left: 4px;
             bottom: 4px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
         
         input:checked + .toggle-slider {
-            background-color: var(--primary);
+            background-color: var(--pink);
         }
         
         input:checked + .toggle-slider:before {
-            transform: translateX(30px);
+            transform: translateX(34px);
+            content: "💧";
         }
         
         /* App Navigation */
         .app-nav {
             display: flex;
             justify-content: space-around;
-            background: var(--light-transparent);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(142, 197, 252, 0.2);
-            padding: 15px 0;
+            background: var(--white-transparent);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 3px solid var(--pink);
+            padding: 20px 0;
             position: sticky;
             bottom: 0;
             z-index: 10;
+            border-radius: 30px 30px 0 0;
+            margin: 0 10px;
+            box-shadow: 0 -5px 20px var(--shadow);
         }
         
         .nav-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             background: none;
             border: none;
             color: var(--text-light);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            padding: 10px;
-            border-radius: 15px;
+            padding: 12px;
+            border-radius: 20px;
             transition: all 0.3s ease;
-            min-width: 70px;
+            min-width: 80px;
+            font-weight: 600;
         }
         
         .nav-btn i {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
         }
         
         .nav-btn.active {
-            color: var(--primary);
-            background: rgba(142, 197, 252, 0.1);
-            transform: translateY(-5px);
+            color: var(--pink-dark);
+            background: var(--pink-light);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
+        }
+        
+        .nav-btn.active i {
+            transform: scale(1.2);
         }
         
         .nav-btn:hover, .nav-btn:active {
-            color: var(--primary);
+            color: var(--pink-dark);
+            transform: translateY(-5px);
         }
         
         /* Screens */
@@ -706,8 +891,8 @@
         
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         /* Utility Classes */
@@ -717,39 +902,74 @@
         
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 5px;
+            width: 8px;
         }
         
         ::-webkit-scrollbar-track {
-            background: rgba(142, 197, 252, 0.1);
+            background: rgba(255, 182, 193, 0.1);
             border-radius: 10px;
         }
         
         ::-webkit-scrollbar-thumb {
-            background: rgba(142, 197, 252, 0.3);
+            background: var(--pink);
             border-radius: 10px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(142, 197, 252, 0.5);
+            background: var(--pink-dark);
+        }
+        
+        /* Responsive */
+        @media (max-width: 500px) {
+            .app-header, .app-nav {
+                margin: 0 5px;
+            }
+            
+            .app-content {
+                padding: 0 20px 20px;
+            }
+            
+            .timer-display {
+                font-size: 4.5rem;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-btn.large {
+                grid-column: span 1;
+            }
+            
+            .mascot {
+                font-size: 5rem;
+            }
+            
+            .bottle {
+                width: 70px;
+                height: 120px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Decorative elements -->
+    <div id="decorations"></div>
+    
     <!-- App Container -->
     <div class="app-container">
         <!-- App Header -->
         <header class="app-header">
             <div class="logo">
-                <div class="logo-icon">💧</div>
+                <div class="logo-icon">💧🐾</div>
                 <div class="logo-text">Droplet</div>
             </div>
             <div class="header-actions">
                 <button class="header-btn" id="settingsBtn" title="Settings">
-                    <i class="fas fa-cog"></i>
+                    <i class="fas fa-paw"></i>
                 </button>
                 <button class="header-btn" id="statsBtn" title="Statistics">
-                    <i class="fas fa-chart-bar"></i>
+                    <i class="fas fa-chart-heart"></i>
                 </button>
             </div>
         </header>
@@ -759,40 +979,40 @@
             <!-- Welcome Screen -->
             <div class="screen active" id="welcomeScreen">
                 <div class="welcome-screen">
-                    <div class="welcome-illustration">💧</div>
+                    <div class="welcome-illustration">🐰💧✨</div>
                     <h1 class="welcome-title">Welcome to Droplet!</h1>
                     <p>By @kai.funded</p>
-                    <p class="welcome-subtitle">Your hydration companion that reminds you to drink 1L (half a bottle) every 30 minutes</p>
+                    <p class="welcome-subtitle">Your cute animal friend that reminds you to drink 1L (half a bottle) every 30 minutes!</p>
                     
                     <div class="feature-list">
                         <div class="feature-item">
                             <div class="feature-icon">
-                                <i class="fas fa-clock"></i>
+                                <i class="fas fa-heart"></i>
                             </div>
-                            <span>30-minute reminders for 1L water</span>
+                            <span>Super cute animal friends 🐾</span>
                         </div>
                         <div class="feature-item">
                             <div class="feature-icon">
                                 <i class="fas fa-wine-bottle"></i>
                             </div>
-                            <span>Track 2L bottles (3 per day default)</span>
+                            <span>30-min reminders for 1L water 💧</span>
                         </div>
                         <div class="feature-item">
                             <div class="feature-icon">
-                                <i class="fas fa-bell"></i>
+                                <i class="fas fa-paw"></i>
                             </div>
-                            <span>Smart in-app reminders</span>
+                            <span>Adorable animations & emojis ✨</span>
                         </div>
                         <div class="feature-item">
                             <div class="feature-icon">
-                                <i class="fas fa-heart"></i>
+                                <i class="fas fa-sparkles"></i>
                             </div>
-                            <span>Stay hydrated and healthy</span>
+                            <span>Stay healthy & glowing 🌸</span>
                         </div>
                     </div>
                     
                     <button class="control-btn large" id="getStartedBtn">
-                        <i class="fas fa-play-circle"></i> Get Started
+                        <i class="fas fa-heart"></i> Let's Get Started!
                     </button>
                 </div>
             </div>
@@ -800,11 +1020,17 @@
             <!-- Home Screen -->
             <div class="screen" id="homeScreen">
                 <div class="main-screen">
+                    <!-- Animal Mascot -->
+                    <div class="mascot-container">
+                        <div class="mascot" id="mascot">🐇</div>
+                        <div class="mascot-message" id="mascotMessage">Hi there! I'm your hydration buddy! 💕</div>
+                    </div>
+                    
                     <!-- Timer Card -->
                     <div class="timer-card">
                         <h2>Next Reminder In</h2>
                         <div class="timer-display" id="timerDisplay">30:00</div>
-                        <div class="timer-status" id="timerStatus">Ready to start! Tap play to begin 🎯</div>
+                        <div class="timer-status" id="timerStatus">Ready to start! Tap play to begin 💖</div>
                         
                         <div class="controls">
                             <button class="control-btn" id="startBtn">
@@ -817,19 +1043,19 @@
                                 <i class="fas fa-redo"></i> Reset
                             </button>
                             <button class="control-btn large" id="drinkNowBtn">
-                                <i class="fas fa-wine-bottle"></i> I Drank 1L!
+                                <i class="fas fa-wine-bottle"></i> I Drank 1L! 🎉
                             </button>
                         </div>
                     </div>
                     
                     <!-- Fixed Reminder Section -->
                     <div class="reminder-section" id="reminderSection">
-                        <h3 class="reminder-title">💧 Time to Hydrate!</h3>
-                        <p class="reminder-message">It's been 30 minutes! Drink 1L (half a bottle) of water to stay hydrated! 🚰</p>
+                        <h3 class="reminder-title">💕 Time to Hydrate! 🐾</h3>
+                        <p class="reminder-message">It's been 30 minutes! Drink 1L (half a bottle) of water to stay cute and hydrated! ✨💧</p>
                         
                         <div class="reminder-actions">
                             <button class="reminder-btn drank" id="reminderDrankBtn">
-                                <i class="fas fa-check"></i> I Drank 1L
+                                <i class="fas fa-check"></i> Yay, I Drank 1L! 🎀
                             </button>
                         </div>
                     </div>
@@ -847,11 +1073,11 @@
                         <div class="progress-stats">
                             <div class="progress-current">
                                 <div class="stats-number" id="currentLiters">0</div>
-                                <div class="stats-label">Liters Today</div>
+                                <div class="stats-label">Liters Today 💖</div>
                             </div>
                             <div class="progress-goal">
                                 <div class="stats-number" id="dailyGoal">6</div>
-                                <div class="stats-label">Daily Goal (L)</div>
+                                <div class="stats-label">Daily Goal (L) ✨</div>
                             </div>
                         </div>
                     </div>
@@ -859,7 +1085,7 @@
                     <!-- Quick Stats -->
                     <div class="stats-section">
                         <div class="section-title">
-                            <i class="fas fa-chart-pie"></i> Quick Stats
+                            <i class="fas fa-chart-pie"></i> Cute Stats 🐰
                         </div>
                         
                         <div class="stats-grid">
@@ -873,11 +1099,11 @@
                             </div>
                             <div class="stat-card">
                                 <div class="stat-value" id="streakDays">0</div>
-                                <div class="stat-label">Day Streak</div>
+                                <div class="stat-label">Day Streak 🌟</div>
                             </div>
                             <div class="stat-card">
                                 <div class="stat-value" id="totalLiters">0</div>
-                                <div class="stat-label">Total Liters</div>
+                                <div class="stat-label">Total Liters 💕</div>
                             </div>
                         </div>
                     </div>
@@ -888,19 +1114,19 @@
             <div class="screen" id="statsScreen">
                 <div class="progress-section">
                     <div class="section-title">
-                        <i class="fas fa-chart-line"></i> Weekly Progress
+                        <i class="fas fa-chart-line"></i> Weekly Progress 🐾
                     </div>
                     <div id="weeklyChart">
                         <div style="padding: 30px; text-align: center; color: var(--text-light);">
-                            <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
-                            <p>Weekly chart will appear here as you track your hydration!</p>
+                            <div style="font-size: 4rem; margin-bottom: 15px; opacity: 0.5;">📈🐰</div>
+                            <p>Weekly chart will appear here as you track your hydration! Keep going! 💪💕</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="progress-section">
                     <div class="section-title">
-                        <i class="fas fa-history"></i> Recent History
+                        <i class="fas fa-history"></i> Recent History ✨
                     </div>
                     <div class="history-list" id="historyList">
                         <!-- History items will be added here -->
@@ -912,13 +1138,13 @@
             <div class="screen" id="settingsScreen">
                 <div class="progress-section">
                     <div class="section-title">
-                        <i class="fas fa-cog"></i> Settings
+                        <i class="fas fa-cog"></i> Settings 🎀
                     </div>
                     
                     <div class="settings-list">
                         <div class="setting-item">
                             <div class="setting-info">
-                                <div class="setting-title">Daily Bottle Goal</div>
+                                <div class="setting-title">Daily Bottle Goal 🍼</div>
                                 <div class="setting-desc">Each bottle = 2L (reminder every 30 mins for 1L)</div>
                             </div>
                         </div>
@@ -926,22 +1152,22 @@
                         <div class="goal-selector">
                             <div class="goal-option" data-bottles="2">
                                 <div class="goal-number">2</div>
-                                <div class="goal-label">Bottles<br>4L Daily</div>
+                                <div class="goal-label">Bottles<br>4L Daily 🐱</div>
                             </div>
                             <div class="goal-option active" data-bottles="3">
                                 <div class="goal-number">3</div>
-                                <div class="goal-label">Bottles<br>6L Daily</div>
+                                <div class="goal-label">Bottles<br>6L Daily 🐰</div>
                             </div>
                             <div class="goal-option" data-bottles="4">
                                 <div class="goal-number">4</div>
-                                <div class="goal-label">Bottles<br>8L Daily</div>
+                                <div class="goal-label">Bottles<br>8L Daily 🐶</div>
                             </div>
                         </div>
                         
                         <div class="setting-item" style="margin-top: 30px;">
                             <div class="setting-info">
-                                <div class="setting-title">Notifications</div>
-                                <div class="setting-desc">Enable reminders every 30 minutes</div>
+                                <div class="setting-title">Notifications 🔔</div>
+                                <div class="setting-desc">Enable cute reminders every 30 minutes</div>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="notificationToggle" checked>
@@ -951,8 +1177,8 @@
                         
                         <div class="setting-item">
                             <div class="setting-info">
-                                <div class="setting-title">Sound</div>
-                                <div class="setting-desc">Play sound with reminders</div>
+                                <div class="setting-title">Sound 🎵</div>
+                                <div class="setting-desc">Play cute sounds with reminders</div>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="soundToggle" checked>
@@ -962,22 +1188,37 @@
                         
                         <div class="setting-item">
                             <div class="setting-info">
-                                <div class="setting-title">Vibration</div>
-                                <div class="setting-desc">Vibrate on reminders (if supported)</div>
+                                <div class="setting-title">Vibration 📳</div>
+                                <div class="setting-desc">Gentle vibration on reminders</div>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="vibrationToggle">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Animal Friend 🐾</div>
+                                <div class="setting-desc">Choose your hydration buddy</div>
+                            </div>
+                            <select id="animalSelect" style="padding: 12px 20px; border-radius: 20px; border: 3px solid var(--pink); background: var(--white); color: var(--text); font-weight: 600; font-family: 'Comic Neue', cursive; width: 150px;">
+                                <option value="🐇">Bunny 🐇</option>
+                                <option value="🐱">Kitty 🐱</option>
+                                <option value="🐶">Puppy 🐶</option>
+                                <option value="🐻">Bear 🐻</option>
+                                <option value="🦊">Fox 🦊</option>
+                                <option value="🐼">Panda 🐼</option>
+                            </select>
+                        </div>
                     </div>
                     
-                    <button class="control-btn large" id="requestNotificationBtn" style="margin-top: 30px;">
-                        <i class="fas fa-bell"></i> Enable Browser Notifications
+                    <button class="control-btn large" id="requestNotificationBtn" style="margin-top: 30px; background: linear-gradient(135deg, var(--pink), var(--purple));">
+                        <i class="fas fa-bell"></i> Enable Cute Notifications ✨
                     </button>
                     
                     <button class="control-btn reset" id="resetDataBtn" style="margin-top: 15px;">
-                        <i class="fas fa-trash-alt"></i> Reset All Data
+                        <i class="fas fa-trash-alt"></i> Reset All Data 🗑️
                     </button>
                 </div>
             </div>
@@ -987,15 +1228,15 @@
         <nav class="app-nav">
             <button class="nav-btn active" data-screen="homeScreen">
                 <i class="fas fa-home"></i>
-                <span>Home</span>
+                <span>Home 🏠</span>
             </button>
             <button class="nav-btn" data-screen="statsScreen">
                 <i class="fas fa-chart-bar"></i>
-                <span>Stats</span>
+                <span>Stats 📊</span>
             </button>
             <button class="nav-btn" data-screen="settingsScreen">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
+                <i class="fas fa-paw"></i>
+                <span>Settings ⚙️</span>
             </button>
         </nav>
     </div>
@@ -1019,6 +1260,9 @@
         const dailyGoalElement = document.getElementById('dailyGoal');
         const reminderSection = document.getElementById('reminderSection');
         const reminderDrankBtn = document.getElementById('reminderDrankBtn');
+        const mascot = document.getElementById('mascot');
+        const mascotMessage = document.getElementById('mascotMessage');
+        const decorations = document.getElementById('decorations');
         const navBtns = document.querySelectorAll('.nav-btn');
         const screens = document.querySelectorAll('.screen');
         const settingsBtn = document.getElementById('settingsBtn');
@@ -1027,6 +1271,7 @@
         const soundToggle = document.getElementById('soundToggle');
         const vibrationToggle = document.getElementById('vibrationToggle');
         const goalOptions = document.querySelectorAll('.goal-option');
+        const animalSelect = document.getElementById('animalSelect');
         const requestNotificationBtn = document.getElementById('requestNotificationBtn');
         const resetDataBtn = document.getElementById('resetDataBtn');
         const historyList = document.getElementById('historyList');
@@ -1034,6 +1279,20 @@
         const weeklyAvg = document.getElementById('weeklyAvg');
         const streakDays = document.getElementById('streakDays');
         const totalLiters = document.getElementById('totalLiters');
+        
+        // Cute animal messages
+        const animalMessages = [
+            "Stay hydrated and cute! 💕",
+            "You're doing amazing! ✨",
+            "Water makes you glow! 🌟",
+            "Paws-itive hydration! 🐾",
+            "You're a hydration star! ⭐",
+            "So proud of you! 🎀",
+            "Keep slaying! 💅",
+            "Hydration = beauty! 💖",
+            "You've got this! 💪",
+            "Drink up, cutie! 🥤"
+        ];
         
         // App State
         const state = {
@@ -1054,13 +1313,16 @@
             streak: 0,
             totalLifetimeLiters: 0,
             today: new Date().toDateString(),
-            isFirstTime: true
+            isFirstTime: true,
+            currentAnimal: "🐇",
+            cuteMode: true
         };
         
         // Initialize the app
         function init() {
             loadState();
             createBottles();
+            createDecorations();
             updateUI();
             setupEventListeners();
             checkFirstTime();
@@ -1072,6 +1334,73 @@
             
             // Update timer display
             updateTimerDisplay();
+            
+            // Set up mascot interaction
+            setupMascot();
+        }
+        
+        // Create cute decorative elements
+        function createDecorations() {
+            decorations.innerHTML = '';
+            
+            // Create paw prints
+            for (let i = 0; i < 15; i++) {
+                const paw = document.createElement('div');
+                paw.className = 'paw-print';
+                paw.textContent = '🐾';
+                paw.style.left = `${Math.random() * 100}%`;
+                paw.style.top = `${Math.random() * 100}%`;
+                paw.style.fontSize = `${Math.random() * 20 + 15}px`;
+                paw.style.opacity = Math.random() * 0.1 + 0.05;
+                decorations.appendChild(paw);
+            }
+            
+            // Create sparkles
+            for (let i = 0; i < 10; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = '✨';
+                sparkle.style.left = `${Math.random() * 100}%`;
+                sparkle.style.top = `${Math.random() * 100}%`;
+                sparkle.style.fontSize = `${Math.random() * 15 + 10}px`;
+                sparkle.style.animationDelay = `${Math.random() * 2}s`;
+                decorations.appendChild(sparkle);
+            }
+            
+            // Create hearts
+            for (let i = 0; i < 8; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = '💖';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.top = `${Math.random() * 100}%`;
+                heart.style.fontSize = `${Math.random() * 20 + 15}px`;
+                heart.style.animationDelay = `${Math.random() * 6}s`;
+                decorations.appendChild(heart);
+            }
+        }
+        
+        // Set up mascot interaction
+        function setupMascot() {
+            mascot.addEventListener('click', () => {
+                const randomMessage = animalMessages[Math.floor(Math.random() * animalMessages.length)];
+                mascotMessage.textContent = randomMessage;
+                mascotMessage.style.display = 'block';
+                
+                // Animate mascot
+                mascot.style.animation = 'none';
+                setTimeout(() => {
+                    mascot.style.animation = 'wiggle 4s infinite';
+                }, 10);
+                
+                // Hide message after 3 seconds
+                setTimeout(() => {
+                    mascotMessage.style.display = 'none';
+                }, 3000);
+                
+                // Play cute sound
+                playCuteSound();
+            });
         }
         
         // Load state from localStorage
@@ -1110,6 +1439,11 @@
                 state.soundEnabled = parsed.soundEnabled !== undefined ? parsed.soundEnabled : true;
                 state.vibrationEnabled = parsed.vibrationEnabled || false;
                 state.notificationsEnabled = parsed.notificationsEnabled !== undefined ? parsed.notificationsEnabled : true;
+                state.currentAnimal = parsed.currentAnimal || "🐇";
+                
+                // Update UI elements with loaded values
+                mascot.textContent = state.currentAnimal;
+                animalSelect.value = state.currentAnimal;
                 
                 // Update goal selector UI
                 goalOptions.forEach(option => {
@@ -1176,15 +1510,15 @@
                 
                 const bottleLabel = document.createElement('div');
                 bottleLabel.className = 'bottle-label';
-                bottleLabel.textContent = `Bottle ${i + 1}`;
+                bottleLabel.textContent = `Bottle ${i + 1} ${i === 0 ? '🐇' : i === 1 ? '🐱' : i === 2 ? '🐶' : '🐻'}`;
                 
                 const bottleDesc = document.createElement('div');
                 bottleDesc.className = 'bottle-desc';
-                bottleDesc.textContent = `${state.bottleCapacity}L capacity`;
+                bottleDesc.textContent = `${state.bottleCapacity}L capacity 💧`;
                 
                 const bottleStatus = document.createElement('div');
                 bottleStatus.className = 'bottle-status';
-                bottleStatus.textContent = `${Math.min(litersInThisBottle, state.bottleCapacity).toFixed(1)}L / ${state.bottleCapacity}L`;
+                bottleStatus.textContent = `${Math.min(litersInThisBottle, state.bottleCapacity).toFixed(1)}L / ${state.bottleCapacity}L ${litersInThisBottle >= state.bottleCapacity ? '✨' : ''}`;
                 
                 bottleInfo.appendChild(bottleLabel);
                 bottleInfo.appendChild(bottleDesc);
@@ -1209,6 +1543,7 @@
                 welcomeScreen.classList.remove('active');
                 homeScreen.classList.add('active');
                 requestNotificationPermission();
+                playCuteSound();
             });
             
             navBtns.forEach(btn => {
@@ -1227,6 +1562,9 @@
                     if (screenId === 'statsScreen') {
                         updateStatsScreen();
                     }
+                    
+                    // Play cute sound
+                    playCuteSound();
                 });
             });
             
@@ -1235,6 +1573,7 @@
                 document.querySelector('[data-screen="settingsScreen"]').classList.add('active');
                 screens.forEach(screen => screen.classList.remove('active'));
                 settingsScreen.classList.add('active');
+                playCuteSound();
             });
             
             statsBtn.addEventListener('click', () => {
@@ -1243,6 +1582,7 @@
                 screens.forEach(screen => screen.classList.remove('active'));
                 statsScreen.classList.add('active');
                 updateStatsScreen();
+                playCuteSound();
             });
             
             // Timer controls
@@ -1267,24 +1607,36 @@
                         saveState();
                         createBottles();
                         updateStats();
+                        playCuteSound();
                     }
                 });
+            });
+            
+            // Animal selection
+            animalSelect.addEventListener('change', (e) => {
+                state.currentAnimal = e.target.value;
+                mascot.textContent = state.currentAnimal;
+                saveState();
+                playCuteSound();
             });
             
             // Settings
             notificationToggle.addEventListener('change', (e) => {
                 state.notificationsEnabled = e.target.checked;
                 saveState();
+                playCuteSound();
             });
             
             soundToggle.addEventListener('change', (e) => {
                 state.soundEnabled = e.target.checked;
                 saveState();
+                if (e.target.checked) playCuteSound();
             });
             
             vibrationToggle.addEventListener('change', (e) => {
                 state.vibrationEnabled = e.target.checked;
                 saveState();
+                playCuteSound();
             });
             
             requestNotificationBtn.addEventListener('click', requestNotificationPermission);
@@ -1305,11 +1657,11 @@
             
             // Color coding
             if (state.remainingSeconds > 1200) { // 20 minutes
-                timerDisplay.style.color = "var(--primary)";
+                timerDisplay.style.color = "var(--pink)";
             } else if (state.remainingSeconds > 600) { // 10 minutes
-                timerDisplay.style.color = "var(--warning)";
+                timerDisplay.style.color = "var(--yellow)";
             } else {
-                timerDisplay.style.color = "var(--accent)";
+                timerDisplay.style.color = "var(--purple)";
             }
         }
         
@@ -1318,7 +1670,7 @@
             if (state.isRunning) return;
             
             state.isRunning = true;
-            timerStatus.textContent = "Timer running! Next reminder in 30 minutes ⏰";
+            timerStatus.textContent = "Timer running! Next reminder in 30 minutes ⏰💖";
             
             state.timerInterval = setInterval(() => {
                 state.remainingSeconds--;
@@ -1326,24 +1678,27 @@
                 
                 // Status updates
                 if (state.remainingSeconds === 1200) { // 20 minutes
-                    timerStatus.textContent = "20 minutes to go! Keep it up! 💪";
+                    timerStatus.textContent = "20 minutes to go! Keep it up, cutie! 💪✨";
                 } else if (state.remainingSeconds === 600) { // 10 minutes
-                    timerStatus.textContent = "10 minutes left! Almost time to hydrate! 💧";
+                    timerStatus.textContent = "10 minutes left! Almost time to hydrate! 💧🐾";
                 } else if (state.remainingSeconds === 300) { // 5 minutes
-                    timerStatus.textContent = "5 minutes left! Get ready to drink 1L! 🚰";
+                    timerStatus.textContent = "5 minutes left! Get ready to drink 1L! 🚰💕";
                 } else if (state.remainingSeconds === 60) { // 1 minute
-                    timerStatus.textContent = "One minute left! Prepare your water! ⏳";
+                    timerStatus.textContent = "One minute left! Prepare your water! ⏳🎀";
                 } else if (state.remainingSeconds <= 0) {
                     triggerReminder();
                 }
             }, 1000);
+            
+            playCuteSound();
         }
         
         // Pause timer
         function pauseTimer() {
             state.isRunning = false;
             clearInterval(state.timerInterval);
-            timerStatus.textContent = "Timer paused ⏸️";
+            timerStatus.textContent = "Timer paused ⏸️💤";
+            playCuteSound();
         }
         
         // Reset timer
@@ -1352,8 +1707,9 @@
             clearInterval(state.timerInterval);
             state.remainingSeconds = state.totalSeconds;
             updateTimerDisplay();
-            timerStatus.textContent = "Timer reset! Tap start to begin 💧";
+            timerStatus.textContent = "Timer reset! Tap start to begin 💧💖";
             reminderSection.classList.remove('show');
+            playCuteSound();
         }
         
         // Trigger reminder
@@ -1368,14 +1724,14 @@
             
             // Send browser notification if allowed
             if (state.notificationsAllowed) {
-                new Notification('💧 Time to Drink Water!', {
-                    body: 'It\'s been 30 minutes! Drink 1L (half a bottle) to stay hydrated!',
+                new Notification('💕 Time to Drink Water! 🐾', {
+                    body: 'It\'s been 30 minutes! Drink 1L (half a bottle) to stay cute and hydrated! ✨',
                     icon: 'icons/icon-192.png',
                     tag: 'droplet-reminder'
                 });
             }
             
-            // Play sound if enabled
+            // Play cute sound if enabled
             if (state.soundEnabled) {
                 playReminderSound();
             }
@@ -1387,26 +1743,64 @@
             
             // Pause timer
             pauseTimer();
+            
+            // Show mascot message
+            mascotMessage.textContent = "Time to drink water, cutie! 💧✨";
+            mascotMessage.style.display = 'block';
+            setTimeout(() => {
+                mascotMessage.style.display = 'none';
+            }, 3000);
         }
         
-        // Play reminder sound
+        // Play cute reminder sound
         function playReminderSound() {
             try {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Create a cute bell-like sound
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
                 
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 
+                // Cute chime sound
                 oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.5);
+                oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+                oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.2);
                 
                 gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
                 
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                // Sound not supported
+            }
+        }
+        
+        // Play general cute sound
+        function playCuteSound() {
+            if (!state.soundEnabled) return;
+            
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Create a cute tap sound
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
             } catch (e) {
                 // Sound not supported
             }
@@ -1443,12 +1837,12 @@
             createBottles();
             updateStats();
             
-            // Update status message
+            // Update status message with cute emojis
             const litersLeft = totalLitersGoal - state.litersDrunk;
             if (litersLeft > 0) {
-                timerStatus.textContent = `Great! 1L recorded! ${litersLeft.toFixed(1)}L to go today! 🎉`;
+                timerStatus.textContent = `Yay! 1L recorded! ${litersLeft.toFixed(1)}L to go today! 🎉💕`;
             } else {
-                timerStatus.textContent = `🎊 Amazing! You've reached your daily goal! 🎊`;
+                timerStatus.textContent = `🎊 Amazing! You've reached your daily goal! You're a star! ⭐✨`;
             }
             
             // Hide reminder section if visible
@@ -1464,6 +1858,22 @@
             
             // Save state
             saveState();
+            
+            // Play celebration sound
+            playCuteSound();
+            
+            // Animate mascot
+            mascot.style.animation = 'none';
+            setTimeout(() => {
+                mascot.style.animation = 'wiggle 4s infinite';
+            }, 10);
+            
+            // Show cute message
+            mascotMessage.textContent = "Great job! Stay hydrated! 💖✨";
+            mascotMessage.style.display = 'block';
+            setTimeout(() => {
+                mascotMessage.style.display = 'none';
+            }, 3000);
         }
         
         // Handle "I Drank 1L" from reminder
@@ -1496,24 +1906,29 @@
             if (state.history.length === 0) {
                 historyList.innerHTML = `
                     <div style="padding: 30px; text-align: center; color: var(--text-light);">
-                        <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
-                        <p>No hydration history yet. Drink some water to get started!</p>
+                        <div style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;">📝🐰</div>
+                        <p>No hydration history yet. Drink some water to get started, cutie! 💕</p>
                     </div>
                 `;
                 return;
             }
             
-            // Show last 10 entries
+            // Show last 10 entries with cute emojis
             const recentHistory = state.history.slice(0, 10);
-            recentHistory.forEach(entry => {
+            recentHistory.forEach((entry, index) => {
                 const historyItem = document.createElement('div');
                 historyItem.className = 'history-item';
+                
+                // Different cute emojis for each entry
+                const emojis = ['💧', '✨', '🐾', '💖', '🌟', '🎀', '🌸', '🦄', '🐇', '🍼'];
+                const emoji = emojis[index % emojis.length];
+                
                 historyItem.innerHTML = `
                     <div>
-                        <i class="fas fa-wine-bottle" style="color: var(--primary); margin-right: 10px;"></i>
-                        Drank ${entry.amount}L of water
+                        <i class="fas fa-wine-bottle" style="color: var(--pink); margin-right: 10px;"></i>
+                        Drank ${entry.amount}L of water ${emoji}
                     </div>
-                    <div style="color: var(--text-light); font-size: 0.9rem;">
+                    <div style="color: var(--text-light); font-size: 0.9rem; font-weight: 600;">
                         ${entry.time}
                     </div>
                 `;
@@ -1530,34 +1945,34 @@
             
             if (Notification.permission === 'granted') {
                 state.notificationsAllowed = true;
-                timerStatus.textContent = "Notifications already enabled! 🎉";
+                timerStatus.textContent = "Notifications already enabled! Yay! 🎉✨";
                 return;
             }
             
             if (Notification.permission === 'denied') {
-                alert("Notifications were blocked. Please enable them in your browser settings to get reminders.");
+                alert("Notifications were blocked. Please enable them in your browser settings to get cute reminders.");
                 return;
             }
             
             Notification.requestPermission().then(permission => {
                 if (permission === 'granted') {
                     state.notificationsAllowed = true;
-                    timerStatus.textContent = "Notifications enabled! 🎉";
+                    timerStatus.textContent = "Notifications enabled! So cute! ✨💕";
                     
                     // Send welcome notification
-                    new Notification('Droplet is ready! 💧', {
-                        body: 'I\'ll remind you to drink 1L every 30 minutes!',
+                    new Notification('Droplet is ready! 💕🐾', {
+                        body: 'I\'ll remind you to drink 1L every 30 minutes! Stay cute and hydrated! ✨',
                         icon: 'icons/icon-192.png'
                     });
                 } else {
-                    timerStatus.textContent = "Notifications blocked. You'll only see in-app reminders.";
+                    timerStatus.textContent = "Notifications blocked. You'll only see in-app reminders. Still cute though! 💖";
                 }
             });
         }
         
         // Reset all data
         function resetAllData() {
-            if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
+            if (confirm("Are you sure you want to reset all data? This cannot be undone. 😢")) {
                 localStorage.removeItem('dropletState');
                 localStorage.removeItem('dropletFirstTime');
                 
@@ -1578,7 +1993,14 @@
                 updateStats();
                 updateStatsScreen();
                 
-                alert("All data has been reset!");
+                // Show cute message
+                mascotMessage.textContent = "Fresh start! Let's hydrate! 💧💕";
+                mascotMessage.style.display = 'block';
+                setTimeout(() => {
+                    mascotMessage.style.display = 'none';
+                }, 3000);
+                
+                alert("All data has been reset! Fresh start! 🌸✨");
             }
         }
         
@@ -1609,6 +2031,12 @@
                 const yesterdayGoal = state.dailyBottles * state.bottleCapacity;
                 if (state.litersDrunk >= yesterdayGoal) {
                     state.streak++;
+                    // Show streak celebration
+                    mascotMessage.textContent = `Day ${state.streak} streak! Amazing! 🌟✨`;
+                    mascotMessage.style.display = 'block';
+                    setTimeout(() => {
+                        mascotMessage.style.display = 'none';
+                    }, 4000);
                 } else {
                     state.streak = 0;
                 }
@@ -1622,11 +2050,30 @@
                 createBottles();
                 updateStats();
                 saveState();
+                
+                // Show new day message
+                mascotMessage.textContent = "New day! Let's hydrate! 💧🌞";
+                mascotMessage.style.display = 'block';
+                setTimeout(() => {
+                    mascotMessage.style.display = 'none';
+                }, 3000);
             }
         }
         
         // Check for new day every hour
         setInterval(updateWeeklyData, 3600000);
+        
+        // Rotate animal messages every minute
+        setInterval(() => {
+            if (Math.random() > 0.7 && mascotMessage.style.display === 'none') {
+                const randomMessage = animalMessages[Math.floor(Math.random() * animalMessages.length)];
+                mascotMessage.textContent = randomMessage;
+                mascotMessage.style.display = 'block';
+                setTimeout(() => {
+                    mascotMessage.style.display = 'none';
+                }, 3000);
+            }
+        }, 60000);
     </script>
 </body>
 </html>
