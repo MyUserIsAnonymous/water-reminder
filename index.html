@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#8ec5fc">
-    <meta name="description" content="Droplet - Your cute hydration companion that reminds you to drink water every 15 minutes">
+    <meta name="description" content="Droplet - Your hydration companion that reminds you to drink water every 30 minutes">
     <title>Droplet 💧</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -324,51 +324,67 @@
             font-size: 1.6rem;
         }
         
-        /* Water Glasses */
-        .water-glasses {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
+        /* Water Bottles */
+        .water-bottles {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             margin: 25px 0;
         }
         
-        .glass-container {
+        .bottle-container {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(142, 197, 252, 0.08);
+            border-radius: var(--radius-small);
         }
         
-        .glass {
-            width: 60px;
-            height: 90px;
+        .bottle {
+            width: 70px;
+            height: 120px;
             background: rgba(142, 197, 252, 0.1);
-            border-radius: 0 0 20px 20px;
+            border-radius: 15px 15px 5px 5px;
             position: relative;
             overflow: hidden;
             border: 3px solid rgba(142, 197, 252, 0.3);
             transition: all 0.3s ease;
-            cursor: pointer;
         }
         
-        .glass.filled {
+        .bottle.filled {
             border-color: var(--accent);
         }
         
-        .glass-water {
+        .bottle-water {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
             background: linear-gradient(to top, var(--primary), var(--secondary));
             transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border-radius: 0 0 17px 17px;
+            border-radius: 0 0 2px 2px;
         }
         
-        .glass-label {
-            font-size: 0.9rem;
+        .bottle-info {
+            flex: 1;
+        }
+        
+        .bottle-label {
             font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+        
+        .bottle-desc {
+            font-size: 0.9rem;
             color: var(--text-light);
+        }
+        
+        .bottle-status {
+            font-weight: 600;
+            color: var(--primary);
         }
         
         .progress-stats {
@@ -394,6 +410,73 @@
         
         .progress-goal {
             text-align: right;
+        }
+        
+        /* Fixed Reminder Section */
+        .reminder-section {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 15px 35px rgba(142, 197, 252, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .reminder-section.show {
+            display: block;
+        }
+        
+        .reminder-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .reminder-message {
+            margin-bottom: 25px;
+            line-height: 1.5;
+            font-size: 1.1rem;
+        }
+        
+        .reminder-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .reminder-btn {
+            flex: 1;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .reminder-btn:hover, .reminder-btn:active {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .reminder-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .reminder-btn.drank {
+            background: white;
+            color: var(--primary);
         }
         
         /* Stats Section */
@@ -456,128 +539,115 @@
             to { opacity: 1; transform: translateX(0); }
         }
         
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            width: calc(100% - 50px);
-            max-width: 400px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            text-align: center;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .notification.show {
-            transform: translateX(-50%) translateY(0);
-        }
-        
-        .notification-title {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .notification-actions {
-            display: flex;
-            gap: 15px;
+        /* Settings */
+        .settings-list {
             margin-top: 20px;
         }
         
-        .notification-btn {
-            flex: 1;
-            background: white;
-            color: var(--primary);
-            border: none;
-            border-radius: 50px;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .notification-btn:hover, .notification-btn:active {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Install Prompt */
-        .install-prompt {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 50px);
-            max-width: 400px;
-            background: var(--light-transparent);
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: 0 20px 40px var(--shadow-dark);
-            z-index: 999;
-            display: none;
-            animation: slideUp 0.5s ease;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(142, 197, 252, 0.3);
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
-            to { transform: translateX(-50%) translateY(0); opacity: 1; }
-        }
-        
-        .install-content {
+        .setting-item {
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(142, 197, 252, 0.1);
         }
         
-        .install-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-        }
-        
-        .install-text {
+        .setting-info {
             flex: 1;
         }
         
-        .install-text h4 {
+        .setting-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .setting-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* Bottle Goal Selector */
+        .goal-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .goal-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: rgba(142, 197, 252, 0.1);
+            border-radius: var(--radius-small);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .goal-option:hover {
+            background: rgba(142, 197, 252, 0.2);
+        }
+        
+        .goal-option.active {
+            background: rgba(142, 197, 252, 0.25);
+            border-color: var(--primary);
+        }
+        
+        .goal-number {
+            font-size: 1.8rem;
+            font-weight: 800;
             color: var(--primary);
             margin-bottom: 5px;
         }
         
-        .install-text p {
+        .goal-label {
             font-size: 0.9rem;
-            color: var(--text-light);
-            line-height: 1.4;
+            color: var(--text);
         }
         
-        .install-close {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: var(--text-light);
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
             cursor: pointer;
-            padding: 5px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
         }
         
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
         }
         
         /* App Navigation */
@@ -634,76 +704,10 @@
             display: block;
         }
         
-        /* Settings */
-        .settings-list {
-            margin-top: 20px;
-        }
-        
-        .setting-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(142, 197, 252, 0.1);
-        }
-        
-        .setting-info {
-            flex: 1;
-        }
-        
-        .setting-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .setting-desc {
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-        
-        /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 30px;
-        }
-        
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .toggle-slider {
-            background-color: var(--primary);
-        }
-        
-        input:checked + .toggle-slider:before {
-            transform: translateX(30px);
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         /* Utility Classes */
@@ -757,32 +761,33 @@
                 <div class="welcome-screen">
                     <div class="welcome-illustration">💧</div>
                     <h1 class="welcome-title">Welcome to Droplet!</h1>
-                    <p class="welcome-subtitle">Your cute hydration companion that reminds you to drink water every 15 minutes</p>
+                    <p>By @kai.funded</p>
+                    <p class="welcome-subtitle">Your hydration companion that reminds you to drink 1L (half a bottle) every 30 minutes</p>
                     
                     <div class="feature-list">
                         <div class="feature-item">
                             <div class="feature-icon">
-                                <i class="fas fa-bell"></i>
+                                <i class="fas fa-clock"></i>
                             </div>
-                            <span>Smart 15-minute reminders</span>
+                            <span>30-minute reminders for 1L water</span>
                         </div>
                         <div class="feature-item">
                             <div class="feature-icon">
-                                <i class="fas fa-chart-line"></i>
+                                <i class="fas fa-wine-bottle"></i>
                             </div>
-                            <span>Track your daily hydration</span>
+                            <span>Track 2L bottles (3 per day default)</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <span>Smart in-app reminders</span>
                         </div>
                         <div class="feature-item">
                             <div class="feature-icon">
                                 <i class="fas fa-heart"></i>
                             </div>
-                            <span>Cute & friendly design</span>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-mobile-alt"></i>
-                            </div>
-                            <span>Works offline like an app</span>
+                            <span>Stay hydrated and healthy</span>
                         </div>
                     </div>
                     
@@ -798,7 +803,7 @@
                     <!-- Timer Card -->
                     <div class="timer-card">
                         <h2>Next Reminder In</h2>
-                        <div class="timer-display" id="timerDisplay">15:00</div>
+                        <div class="timer-display" id="timerDisplay">30:00</div>
                         <div class="timer-status" id="timerStatus">Ready to start! Tap play to begin 🎯</div>
                         
                         <div class="controls">
@@ -812,7 +817,19 @@
                                 <i class="fas fa-redo"></i> Reset
                             </button>
                             <button class="control-btn large" id="drinkNowBtn">
-                                <i class="fas fa-glass-water"></i> I Just Drank Water!
+                                <i class="fas fa-wine-bottle"></i> I Drank 1L!
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Fixed Reminder Section -->
+                    <div class="reminder-section" id="reminderSection">
+                        <h3 class="reminder-title">💧 Time to Hydrate!</h3>
+                        <p class="reminder-message">It's been 30 minutes! Drink 1L (half a bottle) of water to stay hydrated! 🚰</p>
+                        
+                        <div class="reminder-actions">
+                            <button class="reminder-btn drank" id="reminderDrankBtn">
+                                <i class="fas fa-check"></i> I Drank 1L
                             </button>
                         </div>
                     </div>
@@ -820,21 +837,21 @@
                     <!-- Progress Section -->
                     <div class="progress-section">
                         <div class="section-title">
-                            <i class="fas fa-tint"></i> Today's Hydration
+                            <i class="fas fa-wine-bottle"></i> Today's Hydration
                         </div>
                         
-                        <div class="water-glasses" id="waterGlasses">
-                            <!-- Glasses will be generated here -->
+                        <div class="water-bottles" id="waterBottles">
+                            <!-- Bottles will be generated here -->
                         </div>
                         
                         <div class="progress-stats">
                             <div class="progress-current">
-                                <div class="stats-number" id="currentGlasses">0</div>
-                                <div class="stats-label">Glasses Drank</div>
+                                <div class="stats-number" id="currentLiters">0</div>
+                                <div class="stats-label">Liters Today</div>
                             </div>
                             <div class="progress-goal">
-                                <div class="stats-number">8</div>
-                                <div class="stats-label">Daily Goal</div>
+                                <div class="stats-number" id="dailyGoal">6</div>
+                                <div class="stats-label">Daily Goal (L)</div>
                             </div>
                         </div>
                     </div>
@@ -848,19 +865,19 @@
                         <div class="stats-grid">
                             <div class="stat-card">
                                 <div class="stat-value" id="todayTotal">0</div>
-                                <div class="stat-label">Today</div>
+                                <div class="stat-label">Liters Today</div>
                             </div>
                             <div class="stat-card">
                                 <div class="stat-value" id="weeklyAvg">0</div>
-                                <div class="stat-label">Weekly Avg</div>
+                                <div class="stat-label">Weekly Avg (L)</div>
                             </div>
                             <div class="stat-card">
                                 <div class="stat-value" id="streakDays">0</div>
                                 <div class="stat-label">Day Streak</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-value" id="totalGlasses">0</div>
-                                <div class="stat-label">Total Glasses</div>
+                                <div class="stat-value" id="totalLiters">0</div>
+                                <div class="stat-label">Total Liters</div>
                             </div>
                         </div>
                     </div>
@@ -901,8 +918,30 @@
                     <div class="settings-list">
                         <div class="setting-item">
                             <div class="setting-info">
+                                <div class="setting-title">Daily Bottle Goal</div>
+                                <div class="setting-desc">Each bottle = 2L (reminder every 30 mins for 1L)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="goal-selector">
+                            <div class="goal-option" data-bottles="2">
+                                <div class="goal-number">2</div>
+                                <div class="goal-label">Bottles<br>4L Daily</div>
+                            </div>
+                            <div class="goal-option active" data-bottles="3">
+                                <div class="goal-number">3</div>
+                                <div class="goal-label">Bottles<br>6L Daily</div>
+                            </div>
+                            <div class="goal-option" data-bottles="4">
+                                <div class="goal-number">4</div>
+                                <div class="goal-label">Bottles<br>8L Daily</div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item" style="margin-top: 30px;">
+                            <div class="setting-info">
                                 <div class="setting-title">Notifications</div>
-                                <div class="setting-desc">Enable reminders every 15 minutes</div>
+                                <div class="setting-desc">Enable reminders every 30 minutes</div>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="notificationToggle" checked>
@@ -913,7 +952,7 @@
                         <div class="setting-item">
                             <div class="setting-info">
                                 <div class="setting-title">Sound</div>
-                                <div class="setting-desc">Play sound with notifications</div>
+                                <div class="setting-desc">Play sound with reminders</div>
                             </div>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="soundToggle" checked>
@@ -930,19 +969,6 @@
                                 <input type="checkbox" id="vibrationToggle">
                                 <span class="toggle-slider"></span>
                             </label>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <div class="setting-title">Daily Goal</div>
-                                <div class="setting-desc">Change your daily water intake goal</div>
-                            </div>
-                            <select id="goalSelect" style="padding: 8px 15px; border-radius: 10px; border: 1px solid rgba(142, 197, 252, 0.3); background: white; color: var(--text);">
-                                <option value="6">6 Glasses</option>
-                                <option value="8" selected>8 Glasses</option>
-                                <option value="10">10 Glasses</option>
-                                <option value="12">12 Glasses</option>
-                            </select>
                         </div>
                     </div>
                     
@@ -973,48 +999,7 @@
             </button>
         </nav>
     </div>
-    
-    <!-- Notification Popup -->
-    <div class="notification" id="notification">
-        <h3 class="notification-title">💧 Time to Hydrate!</h3>
-        <p>It's been 15 minutes! Drink a glass of water to stay healthy and happy! 🌊</p>
-        
-        <div class="notification-actions">
-            <button class="notification-btn" id="drankBtn">
-                <i class="fas fa-check"></i> I Drank Water!
-            </button>
-            <button class="notification-btn" id="snoozeBtn">
-                <i class="fas fa-clock"></i> Snooze 5 min
-            </button>
-        </div>
-    </div>
-    
-    <!-- Install Prompt -->
-    <div class="install-prompt" id="installPrompt">
-        <div class="install-content">
-            <div class="install-icon">💧</div>
-            <div class="install-text">
-                <h4>Install Droplet</h4>
-                <p>Add Droplet to your home screen for a better experience! It works offline like an app.</p>
-            </div>
-            <button class="install-close" id="installClose">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    </div>
 
-    <!-- Service Worker Registration -->
-    <script>
-        // Register service worker for PWA functionality
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(error => {
-                    console.log('Service Worker registration failed:', error);
-                });
-            });
-        }
-    </script>
-    
     <!-- Main App Script -->
     <script>
         // DOM Elements
@@ -1029,13 +1014,11 @@
         const resetBtn = document.getElementById('resetBtn');
         const drinkNowBtn = document.getElementById('drinkNowBtn');
         const getStartedBtn = document.getElementById('getStartedBtn');
-        const waterGlasses = document.getElementById('waterGlasses');
-        const currentGlasses = document.getElementById('currentGlasses');
-        const notification = document.getElementById('notification');
-        const drankBtn = document.getElementById('drankBtn');
-        const snoozeBtn = document.getElementById('snoozeBtn');
-        const installPrompt = document.getElementById('installPrompt');
-        const installClose = document.getElementById('installClose');
+        const waterBottles = document.getElementById('waterBottles');
+        const currentLiters = document.getElementById('currentLiters');
+        const dailyGoalElement = document.getElementById('dailyGoal');
+        const reminderSection = document.getElementById('reminderSection');
+        const reminderDrankBtn = document.getElementById('reminderDrankBtn');
         const navBtns = document.querySelectorAll('.nav-btn');
         const screens = document.querySelectorAll('.screen');
         const settingsBtn = document.getElementById('settingsBtn');
@@ -1043,23 +1026,25 @@
         const notificationToggle = document.getElementById('notificationToggle');
         const soundToggle = document.getElementById('soundToggle');
         const vibrationToggle = document.getElementById('vibrationToggle');
-        const goalSelect = document.getElementById('goalSelect');
+        const goalOptions = document.querySelectorAll('.goal-option');
         const requestNotificationBtn = document.getElementById('requestNotificationBtn');
         const resetDataBtn = document.getElementById('resetDataBtn');
         const historyList = document.getElementById('historyList');
         const todayTotal = document.getElementById('todayTotal');
         const weeklyAvg = document.getElementById('weeklyAvg');
         const streakDays = document.getElementById('streakDays');
-        const totalGlasses = document.getElementById('totalGlasses');
+        const totalLiters = document.getElementById('totalLiters');
         
         // App State
         const state = {
-            totalSeconds: 15 * 60, // 15 minutes
-            remainingSeconds: 15 * 60,
+            totalSeconds: 30 * 60, // 30 minutes
+            remainingSeconds: 30 * 60,
             timerInterval: null,
             isRunning: false,
-            glassesDrunk: 0,
-            dailyGoal: 8,
+            litersDrunk: 0,
+            dailyBottles: 3, // Default: 3 bottles (6L total)
+            bottlesDrunk: 0,
+            bottleCapacity: 2, // Each bottle is 2L
             notificationsAllowed: false,
             soundEnabled: true,
             vibrationEnabled: false,
@@ -1067,7 +1052,7 @@
             history: [],
             weeklyData: [],
             streak: 0,
-            totalLifetimeGlasses: 0,
+            totalLifetimeLiters: 0,
             today: new Date().toDateString(),
             isFirstTime: true
         };
@@ -1075,11 +1060,10 @@
         // Initialize the app
         function init() {
             loadState();
-            createGlasses();
+            createBottles();
             updateUI();
             setupEventListeners();
             checkFirstTime();
-            checkInstallPrompt();
             
             // Check notification permission
             if ('Notification' in window && Notification.permission === 'granted') {
@@ -1098,39 +1082,49 @@
                 
                 // Only load if data is from today
                 if (parsed.today === new Date().toDateString()) {
-                    state.glassesDrunk = parsed.glassesDrunk || 0;
+                    state.litersDrunk = parsed.litersDrunk || 0;
+                    state.bottlesDrunk = parsed.bottlesDrunk || 0;
                     state.history = parsed.history || [];
                     state.streak = parsed.streak || 0;
-                    state.totalLifetimeGlasses = parsed.totalLifetimeGlasses || 0;
+                    state.totalLifetimeLiters = parsed.totalLifetimeLiters || 0;
                     state.weeklyData = parsed.weeklyData || [];
                 } else {
                     // Check if yesterday was completed
                     const yesterday = new Date();
                     yesterday.setDate(yesterday.getDate() - 1);
-                    if (parsed.today === yesterday.toDateString() && parsed.glassesDrunk >= state.dailyGoal) {
+                    if (parsed.today === yesterday.toDateString() && parsed.litersDrunk >= (parsed.dailyBottles || 3) * 2) {
                         state.streak = (parsed.streak || 0) + 1;
                     } else if (parsed.today !== new Date().toDateString()) {
                         state.streak = 0;
                     }
                     
                     // Reset daily data
-                    state.glassesDrunk = 0;
+                    state.litersDrunk = 0;
+                    state.bottlesDrunk = 0;
                     state.history = [];
                     state.today = new Date().toDateString();
                 }
                 
                 // Load settings
-                state.dailyGoal = parsed.dailyGoal || 8;
+                state.dailyBottles = parsed.dailyBottles || 3;
                 state.soundEnabled = parsed.soundEnabled !== undefined ? parsed.soundEnabled : true;
                 state.vibrationEnabled = parsed.vibrationEnabled || false;
                 state.notificationsEnabled = parsed.notificationsEnabled !== undefined ? parsed.notificationsEnabled : true;
+                
+                // Update goal selector UI
+                goalOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (parseInt(option.dataset.bottles) === state.dailyBottles) {
+                        option.classList.add('active');
+                    }
+                });
             }
             
             // Update UI elements with loaded values
-            goalSelect.value = state.dailyGoal;
             soundToggle.checked = state.soundEnabled;
             vibrationToggle.checked = state.vibrationEnabled;
             notificationToggle.checked = state.notificationsEnabled;
+            dailyGoalElement.textContent = state.dailyBottles * 2; // Convert bottles to liters
         }
         
         // Save state to localStorage
@@ -1152,44 +1146,60 @@
             }
         }
         
-        // Create glasses visualization
-        function createGlasses() {
-            waterGlasses.innerHTML = '';
-            for (let i = 0; i < state.dailyGoal; i++) {
-                const glassContainer = document.createElement('div');
-                glassContainer.className = 'glass-container';
+        // Create bottles visualization
+        function createBottles() {
+            waterBottles.innerHTML = '';
+            const totalLitersGoal = state.dailyBottles * state.bottleCapacity;
+            
+            for (let i = 0; i < state.dailyBottles; i++) {
+                const bottleContainer = document.createElement('div');
+                bottleContainer.className = 'bottle-container';
                 
-                const glass = document.createElement('div');
-                glass.className = 'glass';
-                glass.dataset.index = i;
+                const bottle = document.createElement('div');
+                bottle.className = 'bottle';
+                bottle.dataset.index = i;
                 
                 const water = document.createElement('div');
-                water.className = 'glass-water';
-                water.style.height = i < state.glassesDrunk ? '100%' : '0%';
+                water.className = 'bottle-water';
                 
-                const label = document.createElement('div');
-                label.className = 'glass-label';
-                label.textContent = i + 1;
+                // Calculate how much of this bottle is filled
+                const litersInThisBottle = Math.min(Math.max(state.litersDrunk - (i * state.bottleCapacity), 0), state.bottleCapacity);
+                const fillPercentage = (litersInThisBottle / state.bottleCapacity) * 100;
+                water.style.height = `${fillPercentage}%`;
                 
-                glass.appendChild(water);
-                glassContainer.appendChild(glass);
-                glassContainer.appendChild(label);
-                waterGlasses.appendChild(glassContainer);
+                if (litersInThisBottle >= state.bottleCapacity) {
+                    bottle.classList.add('filled');
+                }
                 
-                // Add click event to manually toggle glasses
-                glass.addEventListener('click', () => {
-                    if (i < state.glassesDrunk) {
-                        // This glass is already filled, do nothing or maybe unfill?
-                        // For now, we'll keep it as is
-                    } else if (i === state.glassesDrunk) {
-                        // Fill this glass
-                        drinkWater();
-                    }
-                });
+                const bottleInfo = document.createElement('div');
+                bottleInfo.className = 'bottle-info';
+                
+                const bottleLabel = document.createElement('div');
+                bottleLabel.className = 'bottle-label';
+                bottleLabel.textContent = `Bottle ${i + 1}`;
+                
+                const bottleDesc = document.createElement('div');
+                bottleDesc.className = 'bottle-desc';
+                bottleDesc.textContent = `${state.bottleCapacity}L capacity`;
+                
+                const bottleStatus = document.createElement('div');
+                bottleStatus.className = 'bottle-status';
+                bottleStatus.textContent = `${Math.min(litersInThisBottle, state.bottleCapacity).toFixed(1)}L / ${state.bottleCapacity}L`;
+                
+                bottleInfo.appendChild(bottleLabel);
+                bottleInfo.appendChild(bottleDesc);
+                bottleInfo.appendChild(bottleStatus);
+                
+                bottle.appendChild(water);
+                bottleContainer.appendChild(bottle);
+                bottleContainer.appendChild(bottleInfo);
+                waterBottles.appendChild(bottleContainer);
             }
             
-            currentGlasses.textContent = state.glassesDrunk;
-            todayTotal.textContent = state.glassesDrunk;
+            currentLiters.textContent = state.litersDrunk.toFixed(1);
+            dailyGoalElement.textContent = (state.dailyBottles * state.bottleCapacity);
+            todayTotal.textContent = state.litersDrunk.toFixed(1);
+            totalLiters.textContent = state.totalLifetimeLiters.toFixed(1);
         }
         
         // Setup event listeners
@@ -1241,14 +1251,24 @@
             resetBtn.addEventListener('click', resetTimer);
             drinkNowBtn.addEventListener('click', drinkWater);
             
-            // Notification buttons
-            drankBtn.addEventListener('click', handleDrankWater);
-            snoozeBtn.addEventListener('click', handleSnooze);
+            // Reminder buttons
+            reminderDrankBtn.addEventListener('click', handleDrankWater);
             
-            // Install prompt
-            installClose.addEventListener('click', () => {
-                installPrompt.style.display = 'none';
-                localStorage.setItem('dropletInstallPromptClosed', 'true');
+            // Goal selector
+            goalOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    goalOptions.forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                    
+                    const newBottleCount = parseInt(option.dataset.bottles);
+                    if (newBottleCount !== state.dailyBottles) {
+                        state.dailyBottles = newBottleCount;
+                        state.litersDrunk = Math.min(state.litersDrunk, newBottleCount * state.bottleCapacity);
+                        saveState();
+                        createBottles();
+                        updateStats();
+                    }
+                });
             });
             
             // Settings
@@ -1265,13 +1285,6 @@
             vibrationToggle.addEventListener('change', (e) => {
                 state.vibrationEnabled = e.target.checked;
                 saveState();
-            });
-            
-            goalSelect.addEventListener('change', (e) => {
-                state.dailyGoal = parseInt(e.target.value);
-                saveState();
-                createGlasses();
-                updateStats();
             });
             
             requestNotificationBtn.addEventListener('click', requestNotificationPermission);
@@ -1291,9 +1304,9 @@
             timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
             // Color coding
-            if (state.remainingSeconds > 600) {
+            if (state.remainingSeconds > 1200) { // 20 minutes
                 timerDisplay.style.color = "var(--primary)";
-            } else if (state.remainingSeconds > 300) {
+            } else if (state.remainingSeconds > 600) { // 10 minutes
                 timerDisplay.style.color = "var(--warning)";
             } else {
                 timerDisplay.style.color = "var(--accent)";
@@ -1305,19 +1318,21 @@
             if (state.isRunning) return;
             
             state.isRunning = true;
-            timerStatus.textContent = "Timer running! Next reminder in 15 minutes ⏰";
+            timerStatus.textContent = "Timer running! Next reminder in 30 minutes ⏰";
             
             state.timerInterval = setInterval(() => {
                 state.remainingSeconds--;
                 updateTimerDisplay();
                 
                 // Status updates
-                if (state.remainingSeconds === 600) {
-                    timerStatus.textContent = "10 minutes to go! You're doing great! 🌟";
-                } else if (state.remainingSeconds === 300) {
-                    timerStatus.textContent = "Just 5 minutes left! Almost time to hydrate! 💧";
-                } else if (state.remainingSeconds === 60) {
-                    timerStatus.textContent = "One minute left! Get ready to drink! 🥤";
+                if (state.remainingSeconds === 1200) { // 20 minutes
+                    timerStatus.textContent = "20 minutes to go! Keep it up! 💪";
+                } else if (state.remainingSeconds === 600) { // 10 minutes
+                    timerStatus.textContent = "10 minutes left! Almost time to hydrate! 💧";
+                } else if (state.remainingSeconds === 300) { // 5 minutes
+                    timerStatus.textContent = "5 minutes left! Get ready to drink 1L! 🚰";
+                } else if (state.remainingSeconds === 60) { // 1 minute
+                    timerStatus.textContent = "One minute left! Prepare your water! ⏳";
                 } else if (state.remainingSeconds <= 0) {
                     triggerReminder();
                 }
@@ -1338,20 +1353,23 @@
             state.remainingSeconds = state.totalSeconds;
             updateTimerDisplay();
             timerStatus.textContent = "Timer reset! Tap start to begin 💧";
-            notification.classList.remove('show');
+            reminderSection.classList.remove('show');
         }
         
         // Trigger reminder
         function triggerReminder() {
             if (!state.notificationsEnabled) return;
             
-            // Show notification popup
-            notification.classList.add('show');
+            // Show fixed reminder section
+            reminderSection.classList.add('show');
+            
+            // Scroll to reminder section
+            reminderSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
             // Send browser notification if allowed
             if (state.notificationsAllowed) {
                 new Notification('💧 Time to Drink Water!', {
-                    body: 'It\'s been 15 minutes! Stay hydrated and happy! 🌊',
+                    body: 'It\'s been 30 minutes! Drink 1L (half a bottle) to stay hydrated!',
                     icon: 'icons/icon-192.png',
                     tag: 'droplet-reminder'
                 });
@@ -1394,18 +1412,24 @@
             }
         }
         
-        // Drink water
+        // Drink 1L of water
         function drinkWater() {
-            if (state.glassesDrunk >= state.dailyGoal) return;
+            const totalLitersGoal = state.dailyBottles * state.bottleCapacity;
             
-            state.glassesDrunk++;
-            state.totalLifetimeGlasses++;
+            if (state.litersDrunk >= totalLitersGoal) return;
+            
+            state.litersDrunk += 1; // Add 1L
+            state.totalLifetimeLiters += 1;
+            
+            // Calculate bottles drunk
+            state.bottlesDrunk = Math.floor(state.litersDrunk / state.bottleCapacity);
             
             // Add to history
             const now = new Date();
             const historyEntry = {
                 time: now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
                 date: now.toDateString(),
+                amount: 1, // 1L
                 timestamp: now.getTime()
             };
             state.history.unshift(historyEntry);
@@ -1416,16 +1440,19 @@
             }
             
             // Update UI
-            createGlasses();
+            createBottles();
             updateStats();
             
             // Update status message
-            const glassesLeft = state.dailyGoal - state.glassesDrunk;
-            if (glassesLeft > 0) {
-                timerStatus.textContent = `Yay! You drank water! ${glassesLeft} glass${glassesLeft > 1 ? 'es' : ''} to go today! 🎉`;
+            const litersLeft = totalLitersGoal - state.litersDrunk;
+            if (litersLeft > 0) {
+                timerStatus.textContent = `Great! 1L recorded! ${litersLeft.toFixed(1)}L to go today! 🎉`;
             } else {
                 timerStatus.textContent = `🎊 Amazing! You've reached your daily goal! 🎊`;
             }
+            
+            // Hide reminder section if visible
+            reminderSection.classList.remove('show');
             
             // Reset and restart timer
             state.remainingSeconds = state.totalSeconds;
@@ -1439,36 +1466,26 @@
             saveState();
         }
         
-        // Handle "I Drank Water" from notification
+        // Handle "I Drank 1L" from reminder
         function handleDrankWater() {
             drinkWater();
-            notification.classList.remove('show');
-        }
-        
-        // Handle snooze
-        function handleSnooze() {
-            state.remainingSeconds = 5 * 60;
-            updateTimerDisplay();
-            notification.classList.remove('show');
-            startTimer();
-            timerStatus.textContent = "Snoozed for 5 minutes 😴";
         }
         
         // Update stats
         function updateStats() {
-            currentGlasses.textContent = state.glassesDrunk;
-            todayTotal.textContent = state.glassesDrunk;
+            currentLiters.textContent = state.litersDrunk.toFixed(1);
+            todayTotal.textContent = state.litersDrunk.toFixed(1);
             
             // Calculate weekly average
             if (state.weeklyData.length > 0) {
                 const sum = state.weeklyData.reduce((a, b) => a + b, 0);
-                weeklyAvg.textContent = Math.round(sum / state.weeklyData.length);
+                weeklyAvg.textContent = (sum / state.weeklyData.length).toFixed(1);
             } else {
-                weeklyAvg.textContent = state.glassesDrunk;
+                weeklyAvg.textContent = state.litersDrunk.toFixed(1);
             }
             
             streakDays.textContent = state.streak;
-            totalGlasses.textContent = state.totalLifetimeGlasses;
+            totalLiters.textContent = state.totalLifetimeLiters.toFixed(1);
         }
         
         // Update stats screen
@@ -1493,8 +1510,8 @@
                 historyItem.className = 'history-item';
                 historyItem.innerHTML = `
                     <div>
-                        <i class="fas fa-glass-water" style="color: var(--primary); margin-right: 10px;"></i>
-                        Drank a glass of water
+                        <i class="fas fa-wine-bottle" style="color: var(--primary); margin-right: 10px;"></i>
+                        Drank ${entry.amount}L of water
                     </div>
                     <div style="color: var(--text-light); font-size: 0.9rem;">
                         ${entry.time}
@@ -1529,7 +1546,7 @@
                     
                     // Send welcome notification
                     new Notification('Droplet is ready! 💧', {
-                        body: 'I\'ll remind you to drink water every 15 minutes!',
+                        body: 'I\'ll remind you to drink 1L every 30 minutes!',
                         icon: 'icons/icon-192.png'
                     });
                 } else {
@@ -1538,42 +1555,18 @@
             });
         }
         
-        // Check if we should show install prompt
-        function checkInstallPrompt() {
-            // Check if already installed
-            if (window.matchMedia('(display-mode: standalone)').matches || 
-                window.navigator.standalone === true) {
-                return;
-            }
-            
-            // Check if prompt was already closed
-            if (localStorage.getItem('dropletInstallPromptClosed')) {
-                return;
-            }
-            
-            // Show prompt for iOS or Android
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isAndroid = /Android/.test(navigator.userAgent);
-            
-            if (isIOS || isAndroid) {
-                setTimeout(() => {
-                    installPrompt.style.display = 'block';
-                }, 3000);
-            }
-        }
-        
         // Reset all data
         function resetAllData() {
             if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
                 localStorage.removeItem('dropletState');
                 localStorage.removeItem('dropletFirstTime');
-                localStorage.removeItem('dropletInstallPromptClosed');
                 
                 // Reset state
-                state.glassesDrunk = 0;
+                state.litersDrunk = 0;
+                state.bottlesDrunk = 0;
                 state.history = [];
                 state.streak = 0;
-                state.totalLifetimeGlasses = 0;
+                state.totalLifetimeLiters = 0;
                 state.weeklyData = [];
                 state.today = new Date().toDateString();
                 
@@ -1581,7 +1574,7 @@
                 resetTimer();
                 
                 // Update UI
-                createGlasses();
+                createBottles();
                 updateStats();
                 updateStatsScreen();
                 
@@ -1605,26 +1598,28 @@
             const today = new Date().toDateString();
             if (state.today !== today) {
                 // New day, save yesterday's data
-                state.weeklyData.push(state.glassesDrunk);
+                state.weeklyData.push(state.litersDrunk);
                 
                 // Keep only last 7 days
                 if (state.weeklyData.length > 7) {
                     state.weeklyData.shift();
                 }
                 
-                // Reset daily data
-                state.glassesDrunk = 0;
-                state.history = [];
-                state.today = today;
-                
-                // Update streak if goal was met yesterday
-                if (state.glassesDrunk >= state.dailyGoal) {
+                // Check if goal was met yesterday
+                const yesterdayGoal = state.dailyBottles * state.bottleCapacity;
+                if (state.litersDrunk >= yesterdayGoal) {
                     state.streak++;
                 } else {
                     state.streak = 0;
                 }
                 
-                createGlasses();
+                // Reset daily data
+                state.litersDrunk = 0;
+                state.bottlesDrunk = 0;
+                state.history = [];
+                state.today = today;
+                
+                createBottles();
                 updateStats();
                 saveState();
             }
