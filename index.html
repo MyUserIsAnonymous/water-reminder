@@ -3,17 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#8ec5fc">
+    <meta name="description" content="Droplet - Your cute hydration companion that reminds you to drink water every 15 minutes">
     <title>Droplet 💧</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>">
     <style>
         :root {
             --primary: #8ec5fc;
+            --primary-dark: #5d9cec;
             --secondary: #e0c3fc;
             --accent: #ff9a9e;
+            --accent-dark: #ff767c;
+            --success: #84fab0;
+            --warning: #ffcc33;
             --text: #5d576b;
+            --text-light: #8a8798;
             --light: #ffffff;
+            --light-transparent: rgba(255, 255, 255, 0.95);
             --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.15);
+            --radius: 25px;
+            --radius-small: 15px;
         }
         
         * {
@@ -21,154 +35,188 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'SF Pro Display', sans-serif;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: var(--text);
             min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            overflow-x: hidden;
+            overflow: hidden;
             position: relative;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
         
-        /* Floating bubbles background */
-        .bubbles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        .bubble {
-            position: absolute;
-            background: rgba(142, 197, 252, 0.1);
-            border-radius: 50%;
-            animation: float 15s infinite ease-in-out;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
-        /* Main container */
-        .container {
-            width: 100%;
+        /* App Container */
+        .app-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             max-width: 500px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 25px;
-            box-shadow: 0 15px 35px var(--shadow);
-            margin-top: 20px;
-            text-align: center;
+            margin: 0 auto;
+            width: 100%;
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        /* Header */
-        .header {
+        /* App Header */
+        .app-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            padding: 20px 25px 15px;
+            background: var(--light-transparent);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(142, 197, 252, 0.2);
+            position: relative;
+            z-index: 10;
         }
         
         .logo {
-            font-size: 3.5rem;
-            margin-right: 15px;
-            animation: bounce 2s infinite;
-            filter: drop-shadow(0 5px 5px rgba(142, 197, 252, 0.3));
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
-        @keyframes bounce {
+        .logo-icon {
+            font-size: 2.2rem;
+            animation: dropletBounce 3s infinite;
+        }
+        
+        @keyframes dropletBounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
         
-        h1 {
-            font-size: 2.5rem;
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 5px;
-            font-weight: 800;
         }
         
-        .subtitle {
-            color: var(--text);
-            opacity: 0.8;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
+        .header-actions {
+            display: flex;
+            gap: 15px;
         }
         
-        /* Welcome screen */
-        .welcome-screen {
-            background: linear-gradient(135deg, #fdfcfb 0%, #f1f8ff 100%);
-            border-radius: 25px;
-            padding: 30px;
-            margin-bottom: 25px;
-            border: 2px dashed var(--primary);
-        }
-        
-        .welcome-screen h2 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.8rem;
-        }
-        
-        .welcome-screen p {
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        
-        .notification-permission {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(142, 197, 252, 0.1);
             border: none;
-            border-radius: 50px;
-            padding: 18px 30px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 20px 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            font-size: 1.2rem;
+            color: var(--primary);
+            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(142, 197, 252, 0.4);
-            width: 100%;
         }
         
-        .notification-permission:hover, .notification-permission:active {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(142, 197, 252, 0.6);
+        .header-btn:hover, .header-btn:active {
+            background: rgba(142, 197, 252, 0.2);
+            transform: scale(1.1);
         }
         
-        .notification-permission:active {
-            transform: translateY(-1px);
+        /* App Content */
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 25px 25px;
+            position: relative;
         }
         
-        /* Timer section */
-        .timer-section {
-            background: linear-gradient(135deg, #f8f9ff 0%, #eef4ff 100%);
-            border-radius: 25px;
-            padding: 25px;
-            margin-bottom: 25px;
+        /* Welcome Screen */
+        .welcome-screen {
+            padding: 30px 0;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .welcome-illustration {
+            font-size: 8rem;
+            margin: 30px 0;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        .welcome-title {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .feature-list {
+            text-align: left;
+            max-width: 320px;
+            margin: 30px auto;
+            padding-left: 20px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(142, 197, 252, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        /* Main App Screen */
+        .main-screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Timer Card */
+        .timer-card {
+            background: var(--light-transparent);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 15px 35px var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
         
-        .timer-section::before {
+        .timer-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -182,18 +230,23 @@
             font-size: 5.5rem;
             font-weight: 800;
             color: var(--primary);
-            margin: 15px 0;
-            text-shadow: 0 5px 10px rgba(142, 197, 252, 0.2);
+            margin: 20px 0;
+            text-shadow: 0 5px 15px rgba(142, 197, 252, 0.3);
             font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum";
         }
         
-        .status {
-            font-size: 1.3rem;
-            margin: 15px 0 25px;
+        .timer-status {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
             padding: 15px;
-            border-radius: 15px;
-            background: rgba(142, 197, 252, 0.1);
+            border-radius: var(--radius-small);
+            background: rgba(142, 197, 252, 0.08);
             color: var(--text);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         /* Controls */
@@ -201,7 +254,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin: 25px 0;
+            margin: 20px 0;
         }
         
         .control-btn {
@@ -209,7 +262,7 @@
             color: white;
             border: none;
             border-radius: 20px;
-            padding: 20px;
+            padding: 22px 15px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
@@ -228,7 +281,7 @@
         
         .control-btn:hover, .control-btn:active {
             transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(142, 197, 252, 0.5);
+            box-shadow: 0 15px 25px rgba(142, 197, 252, 0.4);
         }
         
         .control-btn:active {
@@ -236,48 +289,66 @@
         }
         
         .control-btn.pause {
-            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            background: linear-gradient(135deg, var(--warning), #ffb347);
         }
         
         .control-btn.reset {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            background: linear-gradient(135deg, var(--accent), #fad0c4);
         }
         
-        /* Water progress */
-        .water-progress {
-            background: linear-gradient(135deg, #fdfcfb 0%, #f1f8ff 100%);
-            border-radius: 25px;
+        .control-btn.large {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--success), #8fd3f4);
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            background: var(--light-transparent);
+            border-radius: var(--radius);
             padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 10px 30px var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            color: var(--primary);
             margin-bottom: 25px;
         }
         
-        .progress-title {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        .section-title i {
+            font-size: 1.6rem;
         }
         
-        .glasses-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+        /* Water Glasses */
+        .water-glasses {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin: 25px 0;
         }
         
+        .glass-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .glass {
-            width: 50px;
-            height: 70px;
+            width: 60px;
+            height: 90px;
             background: rgba(142, 197, 252, 0.1);
-            border-radius: 0 0 15px 15px;
+            border-radius: 0 0 20px 20px;
             position: relative;
             overflow: hidden;
-            border: 3px solid var(--primary);
+            border: 3px solid rgba(142, 197, 252, 0.3);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .glass.filled {
@@ -291,74 +362,98 @@
             width: 100%;
             background: linear-gradient(to top, var(--primary), var(--secondary));
             transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 0 0 17px 17px;
         }
         
-        .progress-text {
-            font-size: 1.3rem;
+        .glass-label {
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-top: 15px;
-            color: var(--text);
+            color: var(--text-light);
         }
         
-        .progress-text span {
-            color: var(--primary);
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(142, 197, 252, 0.2);
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
             font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
         }
         
-        /* Cute animal mascot */
-        .mascot {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
+        .stats-label {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+        
+        .progress-goal {
+            text-align: right;
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background: var(--light-transparent);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 10px 30px var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(142, 197, 252, 0.08);
+            border-radius: var(--radius-small);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* History */
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding-right: 10px;
+        }
+        
+        .history-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            box-shadow: 0 10px 30px rgba(142, 197, 252, 0.5);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 10;
-            animation: wiggle 4s infinite;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(142, 197, 252, 0.05);
+            border-radius: var(--radius-small);
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
         }
         
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-        
-        .mascot:hover {
-            transform: scale(1.1);
-        }
-        
-        .mascot-message {
-            position: absolute;
-            bottom: 120px;
-            right: 0;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px var(--shadow);
-            max-width: 250px;
-            display: none;
-            font-size: 1rem;
-            border: 2px solid var(--primary);
-        }
-        
-        .mascot-message::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            right: 30px;
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 10px solid white;
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         /* Notification */
@@ -367,23 +462,26 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(-100px);
-            width: 90%;
+            width: calc(100% - 50px);
             max-width: 400px;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
-            border-radius: 25px;
+            border-radius: var(--radius);
             padding: 25px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             text-align: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .notification.show {
             transform: translateX(-50%) translateY(0);
         }
         
-        .notification h3 {
+        .notification-title {
             font-size: 1.8rem;
             margin-bottom: 15px;
             display: flex;
@@ -416,157 +514,469 @@
             box-shadow: 0 8px 15px rgba(255, 255, 255, 0.2);
         }
         
-        .notification-btn:active {
-            transform: translateY(-1px);
-        }
-        
-        /* Footer */
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            color: var(--text);
-            opacity: 0.7;
-            font-size: 0.9rem;
+        /* Install Prompt */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 50px);
+            max-width: 400px;
+            background: var(--light-transparent);
+            border-radius: var(--radius);
             padding: 20px;
+            box-shadow: 0 20px 40px var(--shadow-dark);
+            z-index: 999;
+            display: none;
+            animation: slideUp 0.5s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(142, 197, 252, 0.3);
         }
         
-        /* Hide elements */
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        
+        .install-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .install-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+        
+        .install-text {
+            flex: 1;
+        }
+        
+        .install-text h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .install-text p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+        
+        .install-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* App Navigation */
+        .app-nav {
+            display: flex;
+            justify-content: space-around;
+            background: var(--light-transparent);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(142, 197, 252, 0.2);
+            padding: 15px 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+        
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            min-width: 70px;
+        }
+        
+        .nav-btn i {
+            font-size: 1.3rem;
+        }
+        
+        .nav-btn.active {
+            color: var(--primary);
+            background: rgba(142, 197, 252, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .nav-btn:hover, .nav-btn:active {
+            color: var(--primary);
+        }
+        
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        /* Settings */
+        .settings-list {
+            margin-top: 20px;
+        }
+        
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(142, 197, 252, 0.1);
+        }
+        
+        .setting-info {
+            flex: 1;
+        }
+        
+        .setting-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .setting-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        /* Utility Classes */
         .hidden {
             display: none !important;
         }
         
-        /* iPhone notch safe area */
-        @supports (padding: max(0px)) {
-            body {
-                padding-left: max(20px, env(safe-area-inset-left));
-                padding-right: max(20px, env(safe-area-inset-right));
-                padding-bottom: max(20px, env(safe-area-inset-bottom));
-            }
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
         }
         
-        /* Responsive adjustments */
-        @media (max-width: 500px) {
-            .container {
-                padding: 20px;
-                border-radius: 25px;
-            }
-            
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .timer-display {
-                font-size: 4.5rem;
-            }
-            
-            .controls {
-                grid-template-columns: 1fr;
-            }
-            
-            .mascot {
-                width: 80px;
-                height: 80px;
-                font-size: 2.5rem;
-                bottom: 20px;
-                right: 20px;
-            }
+        ::-webkit-scrollbar-track {
+            background: rgba(142, 197, 252, 0.1);
+            border-radius: 10px;
         }
         
-        @media (max-height: 700px) {
-            .mascot {
-                display: none;
-            }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(142, 197, 252, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(142, 197, 252, 0.5);
         }
     </style>
 </head>
 <body>
-    <!-- Floating bubbles -->
-    <div class="bubbles" id="bubbles"></div>
-    
-    <!-- Cute animal mascot -->
-    <div class="mascot" id="mascot">
-        🐳
-        <div class="mascot-message" id="mascotMessage">
-            Hi! I'm Wally the Whale! I'll remind you to drink water every 15 minutes! 🐳💧
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="logo">
+                <div class="logo-icon">💧</div>
+                <div class="logo-text">Droplet</div>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" id="settingsBtn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="header-btn" id="statsBtn" title="Statistics">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+            </div>
+        </header>
+        
+        <!-- App Content -->
+        <div class="app-content">
+            <!-- Welcome Screen -->
+            <div class="screen active" id="welcomeScreen">
+                <div class="welcome-screen">
+                    <div class="welcome-illustration">💧</div>
+                    <h1 class="welcome-title">Welcome to Droplet!</h1>
+                    <p class="welcome-subtitle">Your cute hydration companion that reminds you to drink water every 15 minutes</p>
+                    
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <span>Smart 15-minute reminders</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span>Track your daily hydration</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <span>Cute & friendly design</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <span>Works offline like an app</span>
+                        </div>
+                    </div>
+                    
+                    <button class="control-btn large" id="getStartedBtn">
+                        <i class="fas fa-play-circle"></i> Get Started
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Home Screen -->
+            <div class="screen" id="homeScreen">
+                <div class="main-screen">
+                    <!-- Timer Card -->
+                    <div class="timer-card">
+                        <h2>Next Reminder In</h2>
+                        <div class="timer-display" id="timerDisplay">15:00</div>
+                        <div class="timer-status" id="timerStatus">Ready to start! Tap play to begin 🎯</div>
+                        
+                        <div class="controls">
+                            <button class="control-btn" id="startBtn">
+                                <i class="fas fa-play"></i> Start
+                            </button>
+                            <button class="control-btn pause" id="pauseBtn">
+                                <i class="fas fa-pause"></i> Pause
+                            </button>
+                            <button class="control-btn reset" id="resetBtn">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            <button class="control-btn large" id="drinkNowBtn">
+                                <i class="fas fa-glass-water"></i> I Just Drank Water!
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Section -->
+                    <div class="progress-section">
+                        <div class="section-title">
+                            <i class="fas fa-tint"></i> Today's Hydration
+                        </div>
+                        
+                        <div class="water-glasses" id="waterGlasses">
+                            <!-- Glasses will be generated here -->
+                        </div>
+                        
+                        <div class="progress-stats">
+                            <div class="progress-current">
+                                <div class="stats-number" id="currentGlasses">0</div>
+                                <div class="stats-label">Glasses Drank</div>
+                            </div>
+                            <div class="progress-goal">
+                                <div class="stats-number">8</div>
+                                <div class="stats-label">Daily Goal</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Stats -->
+                    <div class="stats-section">
+                        <div class="section-title">
+                            <i class="fas fa-chart-pie"></i> Quick Stats
+                        </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="todayTotal">0</div>
+                                <div class="stat-label">Today</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="weeklyAvg">0</div>
+                                <div class="stat-label">Weekly Avg</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="streakDays">0</div>
+                                <div class="stat-label">Day Streak</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalGlasses">0</div>
+                                <div class="stat-label">Total Glasses</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats Screen -->
+            <div class="screen" id="statsScreen">
+                <div class="progress-section">
+                    <div class="section-title">
+                        <i class="fas fa-chart-line"></i> Weekly Progress
+                    </div>
+                    <div id="weeklyChart">
+                        <div style="padding: 30px; text-align: center; color: var(--text-light);">
+                            <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                            <p>Weekly chart will appear here as you track your hydration!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="section-title">
+                        <i class="fas fa-history"></i> Recent History
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <!-- History items will be added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Screen -->
+            <div class="screen" id="settingsScreen">
+                <div class="progress-section">
+                    <div class="section-title">
+                        <i class="fas fa-cog"></i> Settings
+                    </div>
+                    
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Notifications</div>
+                                <div class="setting-desc">Enable reminders every 15 minutes</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="notificationToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Sound</div>
+                                <div class="setting-desc">Play sound with notifications</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="soundToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Vibration</div>
+                                <div class="setting-desc">Vibrate on reminders (if supported)</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="vibrationToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Daily Goal</div>
+                                <div class="setting-desc">Change your daily water intake goal</div>
+                            </div>
+                            <select id="goalSelect" style="padding: 8px 15px; border-radius: 10px; border: 1px solid rgba(142, 197, 252, 0.3); background: white; color: var(--text);">
+                                <option value="6">6 Glasses</option>
+                                <option value="8" selected>8 Glasses</option>
+                                <option value="10">10 Glasses</option>
+                                <option value="12">12 Glasses</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="control-btn large" id="requestNotificationBtn" style="margin-top: 30px;">
+                        <i class="fas fa-bell"></i> Enable Browser Notifications
+                    </button>
+                    
+                    <button class="control-btn reset" id="resetDataBtn" style="margin-top: 15px;">
+                        <i class="fas fa-trash-alt"></i> Reset All Data
+                    </button>
+                </div>
+            </div>
         </div>
+        
+        <!-- App Navigation -->
+        <nav class="app-nav">
+            <button class="nav-btn active" data-screen="homeScreen">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+            <button class="nav-btn" data-screen="statsScreen">
+                <i class="fas fa-chart-bar"></i>
+                <span>Stats</span>
+            </button>
+            <button class="nav-btn" data-screen="settingsScreen">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </button>
+        </nav>
     </div>
     
-    <!-- Main container -->
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">💧</div>
-            <div>
-                <h1>Droplet</h1>
-                <div class="subtitle">Your cute hydration buddy</div>
-            </div>
-        </div>
-        
-        <!-- Welcome screen (shown first) -->
-        <div class="welcome-screen" id="welcomeScreen">
-            <h2>Welcome to Droplet! 🌊</h2>
-            <p>Hi there! I'm your friendly water reminder app. I'll help you stay hydrated by reminding you to drink water every 15 minutes!</p>
-            <p>To get the best experience, please allow notifications so I can remind you even when you're not looking at the screen.</p>
-            
-            <button class="notification-permission" id="permissionBtn">
-                <i class="fas fa-bell"></i> Allow Notifications
-            </button>
-            
-            <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 20px;">
-                <i class="fas fa-info-circle"></i> Don't worry, you can start without notifications too!
-            </p>
-            
-            <button class="control-btn" id="skipPermission" style="margin-top: 15px; background: linear-gradient(135deg, #a1c4fd, #c2e9fb);">
-                <i class="fas fa-forward"></i> Start Without Notifications
-            </button>
-        </div>
-        
-        <!-- Timer section (hidden initially) -->
-        <div class="timer-section hidden" id="timerSection">
-            <h2>Next Reminder In</h2>
-            <div class="timer-display" id="timerDisplay">15:00</div>
-            <div class="status" id="status">Tap start to begin hydrating! 💧</div>
-            
-            <div class="controls">
-                <button class="control-btn" id="startBtn">
-                    <i class="fas fa-play"></i> Start
-                </button>
-                <button class="control-btn pause" id="pauseBtn">
-                    <i class="fas fa-pause"></i> Pause
-                </button>
-                <button class="control-btn reset" id="resetBtn">
-                    <i class="fas fa-redo"></i> Reset
-                </button>
-                <button class="control-btn" id="drinkNowBtn" style="grid-column: span 2; background: linear-gradient(135deg, #84fab0, #8fd3f4);">
-                    <i class="fas fa-glass-water"></i> I Just Drank Water!
-                </button>
-            </div>
-        </div>
-        
-        <!-- Water progress -->
-        <div class="water-progress hidden" id="waterProgress">
-            <div class="progress-title">
-                <i class="fas fa-tint"></i> Today's Hydration
-            </div>
-            
-            <div class="glasses-container" id="glassesContainer">
-                <!-- Glasses will be generated here -->
-            </div>
-            
-            <div class="progress-text">
-                You've drunk <span id="glassesCount">0</span> out of <span>8</span> glasses today!
-            </div>
-        </div>
-        
-        <!-- Tip -->
-        <div style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8; text-align: center;">
-            <i class="fas fa-lightbulb"></i> Tip: Keep this tab open to receive reminders every 15 minutes!
-        </div>
-    </div>
-    
-    <!-- Notification popup -->
+    <!-- Notification Popup -->
     <div class="notification" id="notification">
-        <h3>💧 Time to Hydrate!</h3>
+        <h3 class="notification-title">💧 Time to Hydrate!</h3>
         <p>It's been 15 minutes! Drink a glass of water to stay healthy and happy! 🌊</p>
         
         <div class="notification-actions">
@@ -579,250 +989,391 @@
         </div>
     </div>
     
-    <footer>
-        Made with 💧 for your health | Add to Home Screen for best experience
-    </footer>
+    <!-- Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-content">
+            <div class="install-icon">💧</div>
+            <div class="install-text">
+                <h4>Install Droplet</h4>
+                <p>Add Droplet to your home screen for a better experience! It works offline like an app.</p>
+            </div>
+            <button class="install-close" id="installClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
+    <!-- Service Worker Registration -->
+    <script>
+        // Register service worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+            });
+        }
+    </script>
+    
+    <!-- Main App Script -->
     <script>
         // DOM Elements
         const welcomeScreen = document.getElementById('welcomeScreen');
-        const timerSection = document.getElementById('timerSection');
-        const waterProgress = document.getElementById('waterProgress');
-        const permissionBtn = document.getElementById('permissionBtn');
-        const skipPermissionBtn = document.getElementById('skipPermission');
+        const homeScreen = document.getElementById('homeScreen');
+        const statsScreen = document.getElementById('statsScreen');
+        const settingsScreen = document.getElementById('settingsScreen');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerStatus = document.getElementById('timerStatus');
         const startBtn = document.getElementById('startBtn');
         const pauseBtn = document.getElementById('pauseBtn');
         const resetBtn = document.getElementById('resetBtn');
         const drinkNowBtn = document.getElementById('drinkNowBtn');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const statusElement = document.getElementById('status');
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        const waterGlasses = document.getElementById('waterGlasses');
+        const currentGlasses = document.getElementById('currentGlasses');
         const notification = document.getElementById('notification');
         const drankBtn = document.getElementById('drankBtn');
         const snoozeBtn = document.getElementById('snoozeBtn');
-        const glassesContainer = document.getElementById('glassesContainer');
-        const glassesCountElement = document.getElementById('glassesCount');
-        const mascot = document.getElementById('mascot');
-        const mascotMessage = document.getElementById('mascotMessage');
-        const bubbles = document.getElementById('bubbles');
+        const installPrompt = document.getElementById('installPrompt');
+        const installClose = document.getElementById('installClose');
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const screens = document.querySelectorAll('.screen');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const statsBtn = document.getElementById('statsBtn');
+        const notificationToggle = document.getElementById('notificationToggle');
+        const soundToggle = document.getElementById('soundToggle');
+        const vibrationToggle = document.getElementById('vibrationToggle');
+        const goalSelect = document.getElementById('goalSelect');
+        const requestNotificationBtn = document.getElementById('requestNotificationBtn');
+        const resetDataBtn = document.getElementById('resetDataBtn');
+        const historyList = document.getElementById('historyList');
+        const todayTotal = document.getElementById('todayTotal');
+        const weeklyAvg = document.getElementById('weeklyAvg');
+        const streakDays = document.getElementById('streakDays');
+        const totalGlasses = document.getElementById('totalGlasses');
         
-        // App state
-        let totalSeconds = 15 * 60; // 15 minutes
-        let remainingSeconds = totalSeconds;
-        let timerInterval = null;
-        let isRunning = false;
-        let glassesDrunk = 0;
-        const maxGlasses = 8;
-        let notificationsAllowed = false;
-        
-        // Create bubbles
-        function createBubbles() {
-            for (let i = 0; i < 20; i++) {
-                const bubble = document.createElement('div');
-                bubble.classList.add('bubble');
-                
-                // Random size between 20 and 80px
-                const size = Math.random() * 60 + 20;
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                
-                // Random position
-                bubble.style.left = `${Math.random() * 100}%`;
-                bubble.style.top = `${Math.random() * 100}%`;
-                
-                // Random animation delay
-                bubble.style.animationDelay = `${Math.random() * 15}s`;
-                
-                // Random opacity
-                bubble.style.opacity = Math.random() * 0.3 + 0.1;
-                
-                bubbles.appendChild(bubble);
-            }
-        }
+        // App State
+        const state = {
+            totalSeconds: 15 * 60, // 15 minutes
+            remainingSeconds: 15 * 60,
+            timerInterval: null,
+            isRunning: false,
+            glassesDrunk: 0,
+            dailyGoal: 8,
+            notificationsAllowed: false,
+            soundEnabled: true,
+            vibrationEnabled: false,
+            notificationsEnabled: true,
+            history: [],
+            weeklyData: [],
+            streak: 0,
+            totalLifetimeGlasses: 0,
+            today: new Date().toDateString(),
+            isFirstTime: true
+        };
         
         // Initialize the app
         function init() {
-            createBubbles();
+            loadState();
             createGlasses();
-            loadFromLocalStorage();
+            updateUI();
+            setupEventListeners();
+            checkFirstTime();
+            checkInstallPrompt();
             
-            // Check if we've already asked for notification permission
-            if (localStorage.getItem('dropletNotificationAsked')) {
-                // Skip welcome screen if we've already asked
-                skipWelcomeScreen();
-            }
-            
-            // Check if notifications are already allowed
+            // Check notification permission
             if ('Notification' in window && Notification.permission === 'granted') {
-                notificationsAllowed = true;
-                updateStatus("Notifications enabled! 🎉");
+                state.notificationsAllowed = true;
             }
-            
-            // Set up mascot interaction
-            mascot.addEventListener('click', () => {
-                mascotMessage.style.display = 'block';
-                setTimeout(() => {
-                    mascotMessage.style.display = 'none';
-                }, 3000);
-                
-                // Animate mascot
-                mascot.style.animation = 'none';
-                setTimeout(() => {
-                    mascot.style.animation = 'wiggle 4s infinite';
-                }, 10);
-            });
-            
-            // Set up event listeners
-            permissionBtn.addEventListener('click', requestNotificationPermission);
-            skipPermissionBtn.addEventListener('click', skipWelcomeScreen);
-            startBtn.addEventListener('click', startTimer);
-            pauseBtn.addEventListener('click', pauseTimer);
-            resetBtn.addEventListener('click', resetTimer);
-            drinkNowBtn.addEventListener('click', drinkWater);
-            drankBtn.addEventListener('click', handleDrankWater);
-            snoozeBtn.addEventListener('click', handleSnooze);
             
             // Update timer display
             updateTimerDisplay();
         }
         
-        // Skip welcome screen
-        function skipWelcomeScreen() {
-            welcomeScreen.classList.add('hidden');
-            timerSection.classList.remove('hidden');
-            waterProgress.classList.remove('hidden');
-            localStorage.setItem('dropletNotificationAsked', 'true');
-        }
-        
-        // Request notification permission
-        function requestNotificationPermission() {
-            if (!('Notification' in window)) {
-                updateStatus("Your browser doesn't support notifications 😢");
-                skipWelcomeScreen();
-                return;
-            }
-            
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    notificationsAllowed = true;
-                    updateStatus("Notifications enabled! 🎉");
-                    
-                    // Send a test notification
-                    if ('serviceWorker' in navigator) {
-                        navigator.serviceWorker.ready.then(registration => {
-                            registration.showNotification('Droplet is ready!', {
-                                body: 'I\'ll remind you to drink water every 15 minutes! 💧',
-                                icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>',
-                                badge: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>'
-                            });
-                        });
-                    } else {
-                        new Notification('Droplet is ready!', {
-                            body: 'I\'ll remind you to drink water every 15 minutes! 💧',
-                            icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>'
-                        });
-                    }
+        // Load state from localStorage
+        function loadState() {
+            const savedState = localStorage.getItem('dropletState');
+            if (savedState) {
+                const parsed = JSON.parse(savedState);
+                
+                // Only load if data is from today
+                if (parsed.today === new Date().toDateString()) {
+                    state.glassesDrunk = parsed.glassesDrunk || 0;
+                    state.history = parsed.history || [];
+                    state.streak = parsed.streak || 0;
+                    state.totalLifetimeGlasses = parsed.totalLifetimeGlasses || 0;
+                    state.weeklyData = parsed.weeklyData || [];
                 } else {
-                    updateStatus("Notifications blocked, but you can still use the app! 😊");
+                    // Check if yesterday was completed
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    if (parsed.today === yesterday.toDateString() && parsed.glassesDrunk >= state.dailyGoal) {
+                        state.streak = (parsed.streak || 0) + 1;
+                    } else if (parsed.today !== new Date().toDateString()) {
+                        state.streak = 0;
+                    }
+                    
+                    // Reset daily data
+                    state.glassesDrunk = 0;
+                    state.history = [];
+                    state.today = new Date().toDateString();
                 }
                 
-                skipWelcomeScreen();
-                localStorage.setItem('dropletNotificationAsked', 'true');
-            });
+                // Load settings
+                state.dailyGoal = parsed.dailyGoal || 8;
+                state.soundEnabled = parsed.soundEnabled !== undefined ? parsed.soundEnabled : true;
+                state.vibrationEnabled = parsed.vibrationEnabled || false;
+                state.notificationsEnabled = parsed.notificationsEnabled !== undefined ? parsed.notificationsEnabled : true;
+            }
+            
+            // Update UI elements with loaded values
+            goalSelect.value = state.dailyGoal;
+            soundToggle.checked = state.soundEnabled;
+            vibrationToggle.checked = state.vibrationEnabled;
+            notificationToggle.checked = state.notificationsEnabled;
         }
         
-        // Update status message
-        function updateStatus(message) {
-            statusElement.textContent = message;
+        // Save state to localStorage
+        function saveState() {
+            state.today = new Date().toDateString();
+            localStorage.setItem('dropletState', JSON.stringify(state));
+        }
+        
+        // Check if first time using the app
+        function checkFirstTime() {
+            const firstTime = localStorage.getItem('dropletFirstTime');
+            if (!firstTime) {
+                state.isFirstTime = true;
+                localStorage.setItem('dropletFirstTime', 'false');
+            } else {
+                state.isFirstTime = false;
+                welcomeScreen.classList.remove('active');
+                homeScreen.classList.add('active');
+            }
+        }
+        
+        // Create glasses visualization
+        function createGlasses() {
+            waterGlasses.innerHTML = '';
+            for (let i = 0; i < state.dailyGoal; i++) {
+                const glassContainer = document.createElement('div');
+                glassContainer.className = 'glass-container';
+                
+                const glass = document.createElement('div');
+                glass.className = 'glass';
+                glass.dataset.index = i;
+                
+                const water = document.createElement('div');
+                water.className = 'glass-water';
+                water.style.height = i < state.glassesDrunk ? '100%' : '0%';
+                
+                const label = document.createElement('div');
+                label.className = 'glass-label';
+                label.textContent = i + 1;
+                
+                glass.appendChild(water);
+                glassContainer.appendChild(glass);
+                glassContainer.appendChild(label);
+                waterGlasses.appendChild(glassContainer);
+                
+                // Add click event to manually toggle glasses
+                glass.addEventListener('click', () => {
+                    if (i < state.glassesDrunk) {
+                        // This glass is already filled, do nothing or maybe unfill?
+                        // For now, we'll keep it as is
+                    } else if (i === state.glassesDrunk) {
+                        // Fill this glass
+                        drinkWater();
+                    }
+                });
+            }
+            
+            currentGlasses.textContent = state.glassesDrunk;
+            todayTotal.textContent = state.glassesDrunk;
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Navigation
+            getStartedBtn.addEventListener('click', () => {
+                welcomeScreen.classList.remove('active');
+                homeScreen.classList.add('active');
+                requestNotificationPermission();
+            });
+            
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const screenId = btn.dataset.screen;
+                    
+                    // Update active nav button
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Show selected screen
+                    screens.forEach(screen => screen.classList.remove('active'));
+                    document.getElementById(screenId).classList.add('active');
+                    
+                    // Update stats screen when opened
+                    if (screenId === 'statsScreen') {
+                        updateStatsScreen();
+                    }
+                });
+            });
+            
+            settingsBtn.addEventListener('click', () => {
+                navBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-screen="settingsScreen"]').classList.add('active');
+                screens.forEach(screen => screen.classList.remove('active'));
+                settingsScreen.classList.add('active');
+            });
+            
+            statsBtn.addEventListener('click', () => {
+                navBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-screen="statsScreen"]').classList.add('active');
+                screens.forEach(screen => screen.classList.remove('active'));
+                statsScreen.classList.add('active');
+                updateStatsScreen();
+            });
+            
+            // Timer controls
+            startBtn.addEventListener('click', startTimer);
+            pauseBtn.addEventListener('click', pauseTimer);
+            resetBtn.addEventListener('click', resetTimer);
+            drinkNowBtn.addEventListener('click', drinkWater);
+            
+            // Notification buttons
+            drankBtn.addEventListener('click', handleDrankWater);
+            snoozeBtn.addEventListener('click', handleSnooze);
+            
+            // Install prompt
+            installClose.addEventListener('click', () => {
+                installPrompt.style.display = 'none';
+                localStorage.setItem('dropletInstallPromptClosed', 'true');
+            });
+            
+            // Settings
+            notificationToggle.addEventListener('change', (e) => {
+                state.notificationsEnabled = e.target.checked;
+                saveState();
+            });
+            
+            soundToggle.addEventListener('change', (e) => {
+                state.soundEnabled = e.target.checked;
+                saveState();
+            });
+            
+            vibrationToggle.addEventListener('change', (e) => {
+                state.vibrationEnabled = e.target.checked;
+                saveState();
+            });
+            
+            goalSelect.addEventListener('change', (e) => {
+                state.dailyGoal = parseInt(e.target.value);
+                saveState();
+                createGlasses();
+                updateStats();
+            });
+            
+            requestNotificationBtn.addEventListener('click', requestNotificationPermission);
+            resetDataBtn.addEventListener('click', resetAllData);
+        }
+        
+        // Update UI
+        function updateUI() {
+            updateTimerDisplay();
+            updateStats();
         }
         
         // Update timer display
         function updateTimerDisplay() {
-            const minutes = Math.floor(remainingSeconds / 60);
-            const seconds = remainingSeconds % 60;
+            const minutes = Math.floor(state.remainingSeconds / 60);
+            const seconds = state.remainingSeconds % 60;
             timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
-            // Add cute emoji based on time left
-            if (remainingSeconds > 600) { // More than 10 minutes
-                timerDisplay.style.color = "#8ec5fc";
-            } else if (remainingSeconds > 300) { // 5-10 minutes
-                timerDisplay.style.color = "#ffb347";
-            } else { // Less than 5 minutes
-                timerDisplay.style.color = "#ff9a9e";
+            // Color coding
+            if (state.remainingSeconds > 600) {
+                timerDisplay.style.color = "var(--primary)";
+            } else if (state.remainingSeconds > 300) {
+                timerDisplay.style.color = "var(--warning)";
+            } else {
+                timerDisplay.style.color = "var(--accent)";
             }
         }
         
-        // Start the timer
+        // Start timer
         function startTimer() {
-            if (isRunning) return;
+            if (state.isRunning) return;
             
-            isRunning = true;
-            updateStatus("Timer running! Next reminder in 15 minutes ⏰");
+            state.isRunning = true;
+            timerStatus.textContent = "Timer running! Next reminder in 15 minutes ⏰";
             
-            timerInterval = setInterval(() => {
-                remainingSeconds--;
+            state.timerInterval = setInterval(() => {
+                state.remainingSeconds--;
                 updateTimerDisplay();
                 
-                // Show cute messages as time passes
-                if (remainingSeconds === 600) { // 10 minutes left
-                    updateStatus("10 minutes to go! You're doing great! 🌟");
-                } else if (remainingSeconds === 300) { // 5 minutes left
-                    updateStatus("Just 5 minutes left! Almost time to hydrate! 💧");
-                } else if (remainingSeconds === 60) { // 1 minute left
-                    updateStatus("One minute left! Get ready to drink! 🥤");
-                } else if (remainingSeconds <= 0) {
+                // Status updates
+                if (state.remainingSeconds === 600) {
+                    timerStatus.textContent = "10 minutes to go! You're doing great! 🌟";
+                } else if (state.remainingSeconds === 300) {
+                    timerStatus.textContent = "Just 5 minutes left! Almost time to hydrate! 💧";
+                } else if (state.remainingSeconds === 60) {
+                    timerStatus.textContent = "One minute left! Get ready to drink! 🥤";
+                } else if (state.remainingSeconds <= 0) {
                     triggerReminder();
                 }
             }, 1000);
         }
         
-        // Pause the timer
+        // Pause timer
         function pauseTimer() {
-            isRunning = false;
-            clearInterval(timerInterval);
-            updateStatus("Timer paused ⏸️");
+            state.isRunning = false;
+            clearInterval(state.timerInterval);
+            timerStatus.textContent = "Timer paused ⏸️";
         }
         
-        // Reset the timer
+        // Reset timer
         function resetTimer() {
-            isRunning = false;
-            clearInterval(timerInterval);
-            remainingSeconds = totalSeconds;
+            state.isRunning = false;
+            clearInterval(state.timerInterval);
+            state.remainingSeconds = state.totalSeconds;
             updateTimerDisplay();
-            updateStatus("Timer reset! Tap start to begin 💧");
+            timerStatus.textContent = "Timer reset! Tap start to begin 💧";
             notification.classList.remove('show');
         }
         
         // Trigger reminder
         function triggerReminder() {
+            if (!state.notificationsEnabled) return;
+            
             // Show notification popup
             notification.classList.add('show');
             
             // Send browser notification if allowed
-            if (notificationsAllowed) {
+            if (state.notificationsAllowed) {
                 new Notification('💧 Time to Drink Water!', {
                     body: 'It\'s been 15 minutes! Stay hydrated and happy! 🌊',
-                    icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>',
-                    tag: 'water-reminder'
+                    icon: 'icons/icon-192.png',
+                    tag: 'droplet-reminder'
                 });
             }
             
-            // Play cute sound
-            playReminderSound();
+            // Play sound if enabled
+            if (state.soundEnabled) {
+                playReminderSound();
+            }
+            
+            // Vibrate if enabled and supported
+            if (state.vibrationEnabled && 'vibrate' in navigator) {
+                navigator.vibrate([200, 100, 200]);
+            }
             
             // Pause timer
             pauseTimer();
-            
-            // Animate mascot
-            mascot.style.background = 'linear-gradient(135deg, #ff9a9e, #fad0c4)';
-            setTimeout(() => {
-                mascot.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
-            }, 1000);
         }
         
         // Play reminder sound
         function playReminderSound() {
             try {
-                // Create water drop sound
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
@@ -830,7 +1381,6 @@
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 
-                // Water drop-like sound
                 oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
                 oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.5);
                 
@@ -840,135 +1390,248 @@
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.5);
             } catch (e) {
-                // Sound not supported, that's okay
+                // Sound not supported
             }
         }
         
-        // Handle "I Drank Water" button
+        // Drink water
+        function drinkWater() {
+            if (state.glassesDrunk >= state.dailyGoal) return;
+            
+            state.glassesDrunk++;
+            state.totalLifetimeGlasses++;
+            
+            // Add to history
+            const now = new Date();
+            const historyEntry = {
+                time: now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
+                date: now.toDateString(),
+                timestamp: now.getTime()
+            };
+            state.history.unshift(historyEntry);
+            
+            // Keep only last 50 entries
+            if (state.history.length > 50) {
+                state.history.pop();
+            }
+            
+            // Update UI
+            createGlasses();
+            updateStats();
+            
+            // Update status message
+            const glassesLeft = state.dailyGoal - state.glassesDrunk;
+            if (glassesLeft > 0) {
+                timerStatus.textContent = `Yay! You drank water! ${glassesLeft} glass${glassesLeft > 1 ? 'es' : ''} to go today! 🎉`;
+            } else {
+                timerStatus.textContent = `🎊 Amazing! You've reached your daily goal! 🎊`;
+            }
+            
+            // Reset and restart timer
+            state.remainingSeconds = state.totalSeconds;
+            updateTimerDisplay();
+            
+            if (!state.isRunning) {
+                startTimer();
+            }
+            
+            // Save state
+            saveState();
+        }
+        
+        // Handle "I Drank Water" from notification
         function handleDrankWater() {
             drinkWater();
             notification.classList.remove('show');
         }
         
-        // Handle snooze button
+        // Handle snooze
         function handleSnooze() {
-            // Snooze for 5 minutes
-            remainingSeconds = 5 * 60;
+            state.remainingSeconds = 5 * 60;
             updateTimerDisplay();
-            
-            // Hide notification
             notification.classList.remove('show');
-            
-            // Restart timer
             startTimer();
-            
-            updateStatus("Snoozed for 5 minutes 😴");
+            timerStatus.textContent = "Snoozed for 5 minutes 😴";
         }
         
-        // Drink water now
-        function drinkWater() {
-            glassesDrunk++;
-            if (glassesDrunk > maxGlasses) glassesDrunk = maxGlasses;
+        // Update stats
+        function updateStats() {
+            currentGlasses.textContent = state.glassesDrunk;
+            todayTotal.textContent = state.glassesDrunk;
             
-            // Update UI
-            updateGlasses();
-            updateStatus(`Yay! You drank water! ${maxGlasses - glassesDrunk} glasses to go today! 🎉`);
-            
-            // Reset and restart timer
-            remainingSeconds = totalSeconds;
-            updateTimerDisplay();
-            
-            if (!isRunning) {
-                startTimer();
+            // Calculate weekly average
+            if (state.weeklyData.length > 0) {
+                const sum = state.weeklyData.reduce((a, b) => a + b, 0);
+                weeklyAvg.textContent = Math.round(sum / state.weeklyData.length);
+            } else {
+                weeklyAvg.textContent = state.glassesDrunk;
             }
             
-            // Save to localStorage
-            saveToLocalStorage();
+            streakDays.textContent = state.streak;
+            totalGlasses.textContent = state.totalLifetimeGlasses;
+        }
+        
+        // Update stats screen
+        function updateStatsScreen() {
+            // Update history list
+            historyList.innerHTML = '';
             
-            // Animate mascot
-            mascot.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                mascot.style.transform = 'scale(1)';
-            }, 300);
-        }
-        
-        // Create glasses visualization
-        function createGlasses() {
-            glassesContainer.innerHTML = '';
-            for (let i = 0; i < maxGlasses; i++) {
-                const glass = document.createElement('div');
-                glass.className = 'glass';
-                glass.dataset.index = i;
-                
-                const water = document.createElement('div');
-                water.className = 'glass-water';
-                water.style.height = '0%';
-                
-                glass.appendChild(water);
-                glassesContainer.appendChild(glass);
+            if (state.history.length === 0) {
+                historyList.innerHTML = `
+                    <div style="padding: 30px; text-align: center; color: var(--text-light);">
+                        <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <p>No hydration history yet. Drink some water to get started!</p>
+                    </div>
+                `;
+                return;
             }
+            
+            // Show last 10 entries
+            const recentHistory = state.history.slice(0, 10);
+            recentHistory.forEach(entry => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div>
+                        <i class="fas fa-glass-water" style="color: var(--primary); margin-right: 10px;"></i>
+                        Drank a glass of water
+                    </div>
+                    <div style="color: var(--text-light); font-size: 0.9rem;">
+                        ${entry.time}
+                    </div>
+                `;
+                historyList.appendChild(historyItem);
+            });
         }
         
-        // Update glasses visualization
-        function updateGlasses() {
-            const glasses = document.querySelectorAll('.glass');
-            glasses.forEach((glass, index) => {
-                const water = glass.querySelector('.glass-water');
-                
-                if (index < glassesDrunk) {
-                    glass.classList.add('filled');
-                    // Animate water filling
-                    setTimeout(() => {
-                        water.style.height = '100%';
-                    }, index * 100);
+        // Request notification permission
+        function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                alert("Your browser doesn't support notifications 😢");
+                return;
+            }
+            
+            if (Notification.permission === 'granted') {
+                state.notificationsAllowed = true;
+                timerStatus.textContent = "Notifications already enabled! 🎉";
+                return;
+            }
+            
+            if (Notification.permission === 'denied') {
+                alert("Notifications were blocked. Please enable them in your browser settings to get reminders.");
+                return;
+            }
+            
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    state.notificationsAllowed = true;
+                    timerStatus.textContent = "Notifications enabled! 🎉";
+                    
+                    // Send welcome notification
+                    new Notification('Droplet is ready! 💧', {
+                        body: 'I\'ll remind you to drink water every 15 minutes!',
+                        icon: 'icons/icon-192.png'
+                    });
                 } else {
-                    glass.classList.remove('filled');
-                    water.style.height = '0%';
+                    timerStatus.textContent = "Notifications blocked. You'll only see in-app reminders.";
                 }
             });
+        }
+        
+        // Check if we should show install prompt
+        function checkInstallPrompt() {
+            // Check if already installed
+            if (window.matchMedia('(display-mode: standalone)').matches || 
+                window.navigator.standalone === true) {
+                return;
+            }
             
-            glassesCountElement.textContent = glassesDrunk;
-        }
-        
-        // Save to localStorage
-        function saveToLocalStorage() {
-            const today = new Date().toDateString();
-            const data = {
-                glassesDrunk,
-                date: today
-            };
-            localStorage.setItem('dropletData', JSON.stringify(data));
-        }
-        
-        // Load from localStorage
-        function loadFromLocalStorage() {
-            const savedData = localStorage.getItem('dropletData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                const today = new Date().toDateString();
-                
-                // Only load if data is from today
-                if (data.date === today) {
-                    glassesDrunk = data.glassesDrunk || 0;
-                    updateGlasses();
-                } else {
-                    // Reset for new day
-                    glassesDrunk = 0;
-                    saveToLocalStorage();
-                }
+            // Check if prompt was already closed
+            if (localStorage.getItem('dropletInstallPromptClosed')) {
+                return;
+            }
+            
+            // Show prompt for iOS or Android
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isAndroid = /Android/.test(navigator.userAgent);
+            
+            if (isIOS || isAndroid) {
+                setTimeout(() => {
+                    installPrompt.style.display = 'block';
+                }, 3000);
             }
         }
         
-        // Initialize the app when page loads
+        // Reset all data
+        function resetAllData() {
+            if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
+                localStorage.removeItem('dropletState');
+                localStorage.removeItem('dropletFirstTime');
+                localStorage.removeItem('dropletInstallPromptClosed');
+                
+                // Reset state
+                state.glassesDrunk = 0;
+                state.history = [];
+                state.streak = 0;
+                state.totalLifetimeGlasses = 0;
+                state.weeklyData = [];
+                state.today = new Date().toDateString();
+                
+                // Reset timer
+                resetTimer();
+                
+                // Update UI
+                createGlasses();
+                updateStats();
+                updateStatsScreen();
+                
+                alert("All data has been reset!");
+            }
+        }
+        
+        // Initialize app when page loads
         window.addEventListener('DOMContentLoaded', init);
         
-        // Add to Home Screen prompt for iOS
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // For iOS, we show a custom message
-            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-                updateStatus("💡 Tip: Tap Share > Add to Home Screen for a better experience!");
-            }
+        // Save state before page unload
+        window.addEventListener('beforeunload', () => {
+            saveState();
         });
+        
+        // Auto-save every minute
+        setInterval(saveState, 60000);
+        
+        // Update weekly data at end of day
+        function updateWeeklyData() {
+            const today = new Date().toDateString();
+            if (state.today !== today) {
+                // New day, save yesterday's data
+                state.weeklyData.push(state.glassesDrunk);
+                
+                // Keep only last 7 days
+                if (state.weeklyData.length > 7) {
+                    state.weeklyData.shift();
+                }
+                
+                // Reset daily data
+                state.glassesDrunk = 0;
+                state.history = [];
+                state.today = today;
+                
+                // Update streak if goal was met yesterday
+                if (state.glassesDrunk >= state.dailyGoal) {
+                    state.streak++;
+                } else {
+                    state.streak = 0;
+                }
+                
+                createGlasses();
+                updateStats();
+                saveState();
+            }
+        }
+        
+        // Check for new day every hour
+        setInterval(updateWeeklyData, 3600000);
     </script>
 </body>
 </html>
