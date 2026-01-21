@@ -1,10 +1,11 @@
 // Service Worker for Droplet PWA
-const CACHE_NAME = 'droplet-v1';
+const CACHE_NAME = 'droplet-v2';
 const urlsToCache = [
   './',
   './index.html',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './manifest.json',
+  './icons/droplet-icon-192.png',
+  './icons/droplet-icon-512.png'
 ];
 
 // Install event
@@ -13,6 +14,9 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         return cache.addAll(urlsToCache);
+      })
+      .then(() => {
+        return self.skipWaiting();
       })
   );
 });
@@ -28,6 +32,8 @@ self.addEventListener('activate', event => {
           }
         })
       );
+    }).then(() => {
+      return self.clients.claim();
     })
   );
 });
@@ -45,20 +51,42 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Notification click event
+// Push notification event (for future use)
+self.addEventListener('push', event => {
+  const options = {
+    body: event.data ? event.data.text() : 'Time to drink water! 💧',
+    icon: 'icons/droplet-icon-192.png',
+    badge: 'icons/droplet-icon-192.png',
+    tag: 'droplet-reminder',
+    requireInteraction: false,
+    silent: true // Don't play default sound on iOS
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('💕 Droplet Reminder!', options)
+  );
+});
+
+// Notification click event - IMPROVED for iOS
 self.addEventListener('notificationclick', event => {
   event.notification.close();
+  
   event.waitUntil(
-    clients.matchAll({type: 'window', includeUncontrolled: true})
-      .then(windowClients => {
-        for (let client of windowClients) {
-          if (client.url === self.registration.scope && 'focus' in client) {
-            return client.focus();
-          }
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    }).then(windowClients => {
+      // Check if there's already a window open
+      for (let client of windowClients) {
+        if (client.url.includes(self.registration.scope) && 'focus' in client) {
+          return client.focus();
         }
-        if (clients.openWindow) {
-          return clients.openWindow('./');
-        }
-      })
+      }
+      
+      // If no window is open, open one
+      if (clients.openWindow) {
+        return clients.openWindow('./');
+      }
+    })
   );
 });
