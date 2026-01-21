@@ -4,8 +4,8 @@
   "description": "Your cute animal hydration companion",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#ffb6c1",
-  "theme_color": "#ffb6c1",
+  "background_color": "#8B0000",
+  "theme_color": "#8B0000",
   "icons": [
     {
       "src": "icons/droplet-icon-192.png",
